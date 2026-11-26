@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orlando Dec '26</title>
+<meta name="application-name" content="ORLANDO">
+<meta name="apple-mobile-web-app-title" content="ORLANDO">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2443c9">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a family holiday — playful, warm, a bit of sparkle, still quick to read in a queue.
+   IDEA: the fold-out park guide map you grab at the gate, crossed with a fireworks night.
+   PICTURE: a royal-blue night sky with an original storybook castle and bursting fireworks; tap the countdown for more.
+   COLOUR and TYPE: royal blue sky, candy pink, gold sparkle, rainbow category colours; Fredoka titles, Nunito text.
+   LAYOUT: sticky sky header with tabs + day chips; one column of big-time cards; works on a phone in one hand. */
+:root{color-scheme:light dark;
+  --sky:#2443c9;--sky2:#3a5cf0;--pink:#ff4f9a;--gold:#ffc53d;
+  --bg:light-dark(#fff8ef,#0f1430);--card:light-dark(#ffffff,#1a2150);--ink:light-dark(#1d1a3a,#f4f1ff);
+  --muted:light-dark(#6c6788,#b4b0d6);--line:light-dark(#efe6f5,#2c3570);--soft:light-dark(#fff0f6,#2a2050);
+  --c-travel:#3d5afe;--c-food:#ff7a1a;--c-ride:#e8336f;--c-show:#8b3ffc;--c-rest:#10a99b;--c-move:#1f9bea;--c-split:#e0a400;--c-fun:#ff4f9a}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{overscroll-behavior-y:none;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Nunito",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.f{font-family:"Fredoka","Nunito",sans-serif}
+button{font:inherit;color:inherit}
+/* splash */
+#splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 30%,#3a5cf0,#1a2c95 70%);display:grid;place-items:center;transition:opacity .7s ease}
+#splash.out{opacity:0;pointer-events:none}
+#splash .in{text-align:center;color:#fff;animation:pop .6s cubic-bezier(.3,1.4,.5,1) both}
+#splash svg{width:min(60vw,240px);height:auto}
+#splash .w{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:30px;font-weight:700;margin-top:8px}
+#splash .s{opacity:.85;font-weight:600}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+/* hero */
+.hero{position:relative;background:linear-gradient(180deg,#1a2c95,var(--sky) 60%,var(--sky2));color:#fff;overflow:hidden;padding:18px 16px 0;text-align:center}
+.hero .scene{display:block;width:min(560px,100%);height:auto;margin:0 auto -4px}
+.hero h1{font-size:clamp(30px,7vw,44px);line-height:1.05;margin:4px 0 2px;text-wrap:balance}
+.hero p{margin:0 0 8px;font-weight:600;opacity:.9}
+.tw{animation:tw 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes tw{50%{opacity:.25;transform:scale(.6)}}
+.burst{transform-box:fill-box;transform-origin:center;animation:burst 3.4s ease-out infinite}
+@keyframes burst{0%{transform:scale(.1);opacity:0}15%{opacity:1}70%{opacity:.9}100%{transform:scale(1.15);opacity:0}}
+/* header */
+header{position:sticky;top:0;z-index:5;background:var(--sky2);color:#fff;box-shadow:0 6px 18px rgba(20,30,110,.25)}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:10px 12px 0;max-width:680px;margin:0 auto}
+.tab{border:2px solid rgba(255,255,255,.55);background:none;color:#fff;font-weight:800;font-size:14px;padding:7px 13px;border-radius:999px;cursor:pointer;min-height:40px}
+.tab.on{background:var(--gold);border-color:var(--gold);color:#1d1a3a}
+.days{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 12px;max-width:680px;margin:0 auto;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 auto;position:relative;border:2px solid transparent;background:rgba(255,255,255,.16);color:#fff;border-radius:16px;padding:6px 10px 7px;min-width:58px;cursor:pointer;text-align:center}
+.day small{display:block;font-size:11px;font-weight:800;text-transform:uppercase;opacity:.85}
+.day b{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:20px;line-height:1.1}
+.day i{display:block;width:10px;height:10px;border-radius:50%;margin:3px auto 0;background:var(--dc)}
+.day.on{background:#fff;color:#1d1a3a}
+.day.today{border-color:var(--gold);animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 14px 4px rgba(255,197,61,.9)}}
+.day,.tab,.chip,.btn{transition:transform .12s ease}.day:active,.tab:active,.chip:active,.btn:active{transform:scale(.92)}
+main{max-width:680px;margin:0 auto;padding:16px 14px 90px}
+/* day head */
+.dh{border-radius:22px;padding:16px 16px 14px;color:#fff;background:var(--dc);margin-bottom:14px;position:relative;overflow:hidden}
+.dh::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.14)}
+.dh small{font-weight:800;text-transform:uppercase;font-size:12px;opacity:.9}
+.dh h2{font-size:clamp(26px,6vw,34px);line-height:1.05;margin:2px 0 6px}
+.dh .meta{display:flex;flex-wrap:wrap;gap:6px}
+.pill{display:inline-block;background:rgba(255,255,255,.22);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700}
+.note{background:var(--soft);border-radius:16px;padding:11px 14px;font-size:15px;margin:0 0 12px;border:2px dashed color-mix(in srgb,var(--pink) 45%,transparent)}
+.note b{color:var(--pink)}
+/* events */
+.ev{display:flex;gap:12px;background:var(--card);border-radius:18px;padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 0 var(--line),0 6px 16px rgba(40,30,120,.06);border-left:6px solid var(--c)}
+.ev.now{outline:3px solid var(--gold);box-shadow:0 0 18px 4px rgba(255,197,61,.55)}
+.ev.past{opacity:.55}
+.time{flex:0 0 66px;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:700;font-size:19px;line-height:1.1;color:var(--c);white-space:nowrap}
+.time small{display:block;font-size:12px;color:var(--muted);font-family:"Nunito",system-ui,sans-serif;font-weight:800}
+.title{font-weight:800;font-size:16.5px;line-height:1.3}
+.sub{font-size:14.5px;color:var(--muted);margin-top:3px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tag{font-size:12px;font-weight:800;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--c,#888) 14%,transparent);color:var(--c,#888)}
+.tag.mp{--c:#8b3ffc}.tag.sp{--c:#e8336f}.tag.sb{--c:#10a99b}.tag.ht{--c:#e0a400}.tag.live{background:var(--gold);color:#1d1a3a}
+.who{display:flex;gap:3px;margin-top:7px}
+.av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:var(--a)}
+.nextup{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border-radius:18px;padding:11px 14px;margin-bottom:14px;border:3px solid var(--gold)}
+.nextup small{display:block;font-size:12px;font-weight:800;color:#c48a00;text-transform:uppercase}
+.empty{background:var(--card);border-radius:20px;padding:22px 18px;text-align:center;border:3px dashed var(--line)}
+.empty h3{margin:0 0 4px;font-size:22px}
+/* countdown */
+.cd{background:var(--card);border-radius:22px;padding:16px;text-align:center;margin:0 0 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 18px rgba(40,30,120,.08)}
+.cd .l{font-weight:800;margin-bottom:10px}
+.cdg{display:flex;justify-content:center;gap:10px}
+.cdu b{display:block;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:clamp(30px,9vw,42px);line-height:1;color:#fff;border-radius:14px;padding:10px 0;width:clamp(58px,17vw,76px);background:var(--u)}
+.cdu small{font-size:12px;font-weight:800;color:var(--muted)}
+.cd .h{font-size:13px;color:var(--muted);margin-top:8px}
+/* generic cards */
+h2.sec{font-size:22px;margin:22px 0 10px}
+.card{background:var(--card);border-radius:18px;padding:13px 15px;margin-bottom:10px;box-shadow:0 2px 0 var(--line)}
+.card h3{margin:0 0 4px;font-size:18px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.row:first-of-type{border-top:0}
+.row span:first-child{color:var(--muted);font-weight:700}
+.row span:last-child{text-align:right}
+.code{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:600;letter-spacing:.06em;background:var(--soft);border-radius:8px;padding:1px 8px;white-space:nowrap}
+.fam{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fm{background:var(--card);border-radius:18px;padding:12px 6px;text-align:center;box-shadow:0 2px 0 var(--line)}
+.fm .av{width:46px;height:46px;font-size:18px;margin:0 auto 4px;font-family:"Fredoka","Nunito",system-ui,sans-serif}
+.fm b{display:block}.fm small{color:var(--muted);font-size:13px}
+/* shows */
+.show{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;background:linear-gradient(135deg,#2a2a8a,#5b2bb5);color:#fff;border-radius:20px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden}
+.show .t{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:24px;font-weight:700;color:var(--gold);white-space:nowrap;grid-row:span 2}
+.show b{font-size:17px}.show span{font-size:14.5px;opacity:.9}
+.show .d{grid-column:1/-1;font-size:12px;font-weight:800;text-transform:uppercase;opacity:.75}
+/* rides */
+.kids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kid{background:var(--card);border-radius:18px;padding:12px;text-align:center;box-shadow:0 2px 0 var(--line)}
+.kid b{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:20px}
+.step{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px}
+.btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--soft);font-size:22px;font-weight:800;cursor:pointer}
+.step output{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-size:28px;font-weight:700;min-width:64px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px;font-weight:800;font-size:14px;cursor:pointer;min-height:40px}
+.chip.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.ride{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:10px 14px;margin-bottom:8px;box-shadow:0 2px 0 var(--line)}
+.ride .h{flex:0 0 52px;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:700;font-size:20px;color:var(--c-split);white-space:nowrap}
+.ride .n{flex:1}.ride .n b{display:block;font-size:15.5px}.ride .n small{color:var(--muted);font-size:13.5px}
+.ok{flex:0 0 auto;display:flex;gap:4px}
+.ok span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff}
+.ok .y{background:#10a99b}.ok .n{background:#c9c4dc}
+/* todo */
+.todo{display:flex;gap:12px;align-items:flex-start;background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:8px;cursor:pointer;box-shadow:0 2px 0 var(--line)}
+.todo .bx{flex:0 0 28px;height:28px;border-radius:9px;border:3px solid var(--pink);display:grid;place-items:center;color:#fff;font-weight:800}
+.todo.done .bx{background:var(--pink)}
+.todo.done .tx{text-decoration:line-through;opacity:.55}
+.todo .when{display:block;font-size:13px;font-weight:800;color:var(--c-move)}
+.bar{height:14px;border-radius:999px;background:var(--line);overflow:hidden;margin:4px 0 14px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:999px;transition:width .4s}
+/* help */
+#help{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:6}
+#help summary{list-style:none;cursor:pointer;font-weight:800;color:#1d1a3a;background:var(--gold);border-radius:999px;padding:11px 18px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#help summary::-webkit-details-marker{display:none}
+.hb{position:absolute;right:0;bottom:52px;background:var(--card);border-radius:16px;box-shadow:0 8px 26px rgba(0,0,0,.25);padding:6px;min-width:230px}
+.hb a{display:flex;justify-content:space-between;gap:10px;padding:10px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:800;font-size:14.5px}
+.hb a small{font-weight:600;color:var(--muted)}
+.hb a.sos{color:#e8336f;border-top:1px solid var(--line)}
+canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
+.foot{color:var(--muted);font-size:13px;text-align:center;margin-top:26px}
+.rise{animation:rise .45s ease both;animation-delay:var(--d,0ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rise,.tw,.burst,.day.today,#splash .in{animation:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="castle">
+    <path d="M40 150V92h16v-14l10-22 10 22v14h12V70l18-40 18 40v22h12V78l10-22 10 22v14h16v58z" fill="#ffd9ec"/>
+    <path d="M106 150V70l18-40v120z" fill="#ffb8d9"/>
+    <path d="M56 78l10-22 10 22zM88 70l18-40 18 40zM144 78l10-22 10 22z" fill="#ff4f9a"/>
+    <path d="M106 30V16l12 4-12 4" fill="#ffc53d"/>
+    <path d="M94 150v-26a12 12 0 0124 0v26z" fill="#2443c9"/>
+    <circle cx="106" cy="92" r="6" fill="#ffc53d"/><rect x="60" y="104" width="8" height="12" rx="4" fill="#2443c9"/><rect x="144" y="104" width="8" height="12" rx="4" fill="#2443c9"/>
+  </g>
+  <g id="fw"><g stroke-width="3" stroke-linecap="round">
+    <path d="M0-8V-26M0 8V26M-8 0H-26M8 0H26M-6-6L-18-18M6 6L18 18M-6 6L-18 18M6-6L18-18"/></g></g>
+  <path id="star" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6z"/>
+</defs></svg>
+
+<div id="splash"><div class="in">
+  <svg viewBox="20 0 172 156" aria-hidden="true"><use href="#castle"/></svg>
+  <div class="w">The magic starts!</div><div class="s">Orlando · 18–23 Dec 2026</div>
+</div></div>
+
+<div class="hero">
+  <h1>Orlando Holiday Magic</h1>
+  <p>Katie · Albert · Jane · Jason · London · Bowie</p>
+  <svg class="scene" viewBox="0 0 560 190" role="img" aria-label="A storybook castle under fireworks">
+    <g fill="#fff"><use href="#star" class="tw" x="40" y="30"/><use href="#star" class="tw" x="510" y="24" style="animation-delay:.6s"/><use href="#star" class="tw" x="470" y="90" style="animation-delay:1.2s"/><use href="#star" class="tw" x="90" y="100" style="animation-delay:1.8s"/><use href="#star" class="tw" x="300" y="14" style="animation-delay:.9s"/></g>
+    <use href="#fw" class="burst" x="120" y="50" stroke="#ffc53d"/>
+    <use href="#fw" class="burst" x="430" y="46" stroke="#ff4f9a" style="animation-delay:1.1s"/>
+    <use href="#fw" class="burst" x="350" y="80" stroke="#7ee8ff" style="animation-delay:2.2s"/>
+    <use href="#fw" class="burst" x="200" y="86" stroke="#b78cff" style="animation-delay:1.6s"/>
+    <ellipse cx="280" cy="188" rx="320" ry="30" fill="#1a2c95" opacity=".55"/>
+    <use href="#castle" transform="translate(140 -20) scale(1.35)"/>
+  </svg>
+</div>
+<header>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-v="days">Days</button>
+    <button class="tab" data-v="shows">Shows</button>
+    <button class="tab" data-v="rides">Rides</button>
+    <button class="tab" data-v="todo">To do</button>
+    <button class="tab" data-v="info">Info</button>
+  </div>
+  <nav class="days" id="days"></nav>
+</header>
+<main id="main"></main>
+
+<details id="help"><summary>Help</summary><div class="hb">
+  <a href="https://wa.me/34689130137" target="_blank" rel="noopener">Albert<small>+34 689 130 137</small></a>
+  <a href="tel:+14075975500">Waldorf front desk<small>407-597-5500</small></a>
+  <a class="sos" href="tel:911">Emergency<small>911</small></a>
+</div></details>
+<canvas id="fx"></canvas>
+
+<script>
+{
+const UPDATED="26 Nov 2026";
+const PEOPLE={K:["Katie","#ff4f9a"],A:["Albert","#3d5afe"],Ja:["Jane","#8b3ffc"],Js:["Jason","#10a99b"],L:["London","#ff7a1a","8"],B:["Bowie","#e0a400","5"]};
+const ALL=["K","A","Ja","Js","L","B"];
+const COL={travel:"var(--c-travel)",food:"var(--c-food)",ride:"var(--c-ride)",show:"var(--c-show)",rest:"var(--c-rest)",move:"var(--c-move)",split:"var(--c-split)",fun:"var(--c-fun)"};
+
+// e = [24h time, label, title, sub, type, tags]
+const DAYS=[
+ {id:"17",dow:"Thu",title:"Sleepover at Jason's",kind:"Night before",lead:"Jason",col:"#6b5cff",ev:[
+  ["20:00","Evening","Night at Jason's","Bags packed, alarms set: we leave at 5:45 AM.","rest"]]},
+ {id:"18",dow:"Fri",title:"Fly to Orlando",kind:"Arrival day",col:"#1f9bea",
+  note:"<b>Keep it easy today.</b> Tomorrow starts at 6:45 AM for the castle breakfast.",ev:[
+  ["05:45","5:45 AM","Leave Jason's for DCA","Adjust for the drive; the flight boards around 7:30.","travel"],
+  ["07:59","7:59 AM","AA 1983 · DCA → MCO","Both bookings on the same flight.","travel",["Lands 10:37"]],
+  ["10:37","10:37 AM","Land at MCO, bags, ride for 6","Ask for an XL vehicle. Bring Bowie's booster if he uses one.","move"],
+  ["11:45","~11:45 AM","Arrive at the Waldorf, drop bags","Rooms may not be ready until the afternoon.","travel"],
+  ["12:00","12:00 PM","Lunch + pick up park tickets","Front desk (Gabrille). Book all the shuttles at the same time.","food"],
+  ["13:30","1:30 PM","Pool, check in, nap for Bowie","Until about 4:30.","rest"],
+  ["17:30","5:30 PM","Shuttle to Disney Springs","Christmas trees and lights, casual dinner.","fun"],
+  ["20:00","8:00 PM","Back to the hotel","Lay out clothes for the morning. Bed early!","rest"]]},
+ {id:"19",dow:"Sat",title:"Magic Kingdom",kind:"Castle day",lead:"Jane",col:"#ff4f9a",
+  note:"<b>Fireworks night!</b> Happily Ever After at 8:00 PM, our one Magic Kingdom fireworks night. Breakfast guests use a separate entrance before opening, so no Early Entry needed. If Bowie runs out of steam, 1:15–2:45 can become a hotel break.",ev:[
+  ["06:45","6:45 AM","Waldorf shuttle (or Uber) to Magic Kingdom","Ask the concierge where it drops. If at the Ticket & Transportation Center, add ~20 min for monorail or ferry.","move"],
+  ["07:35","7:35 AM","At the gate, dining-reservation entrance","Castle photos on an empty Main Street.","fun"],
+  ["08:05","8:05 AM","Cinderella's Royal Table breakfast","Princesses at the table. Tell them Albert eats vegan.","food",["Reserved"]],
+  ["09:15","9:15 AM","Peter Pan's Flight","Right next to the castle.","ride",["mp"]],
+  ["09:45","9:45 AM","Dumbo + The Barnstormer","Barnstormer 35\".","ride",["sb"]],
+  ["10:30","10:30 AM","Seven Dwarfs Mine Train","38\" — both kids qualify.","ride",["sp"]],
+  ["11:15","11:15 AM","Winnie the Pooh","Gentle.","ride",["mp"]],
+  ["11:45","11:45 AM","Haunted Mansion","Dark and spooky — Bowie's call.","ride",["mp"]],
+  ["12:30","12:30 PM","Lunch · Columbia Harbour House","Mobile order. Late, light lunch after a big breakfast.","food"],
+  ["13:15","1:15 PM","Pirates of the Caribbean","Small drop in the dark.","ride"],
+  ["14:00","~2:00 PM","Festival of Fantasy parade","2:00 PM in Dec 2025; 2026 time not posted yet.","show",["TBC"]],
+  ["14:45","2:45 PM","Big Thunder Mountain","38\" — both kids qualify. Rebooked Multi Pass.","ride",["mp"]],
+  ["15:30","3:30 PM","Split: Tiana's Bayou Adventure","London + adults (40\"). Rider Switch. 50-foot drop at the end — check London's comfort. Ponchos!","split"],
+  ["16:15","4:15 PM","Split: Space Mountain","London + adults (44\"). Rider Switch. Bowie + adult: Buzz Lightyear or PeopleMover.","split"],
+  ["17:00","5:00 PM","Buzz Lightyear, PeopleMover, rest","Refill water, dry clothes.","ride"],
+  ["17:45","5:45 PM","Dinner · Cosmic Ray's or Pecos Bill","Mobile order, casual.","food"],
+  ["19:00","~7:00 PM","Disney Starlight night parade","Time not posted yet — usually about an hour before fireworks. Frontierland or Liberty Square end.","show",["TBC"]],
+  ["19:20","7:20 PM","Move to Main Street, facing the castle","Kids at the front. Projections only work from the front.","move"],
+  ["20:00","8:00 PM","Happily Ever After fireworks","Exit is crowded: wait 15 min or browse Main Street shops.","show",["Fireworks"]],
+  ["21:00","~9:00 PM","Back to the Waldorf","","move"]]},
+ {id:"20",dow:"Sun",title:"Universal · day 1",kind:"Universal",lead:"Jason",col:"#ff7a1a",tbd:true,ev:[
+  ["17:30","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets — get there 30–60 min early.","show"],
+  ["17:45","Dusk","The Magic of Christmas at Hogwarts Castle","Repeats until park close · Hogsmeade, Islands of Adventure.","show"]]},
+ {id:"21",dow:"Mon",title:"Hollywood Studios + Epcot",kind:"Double park day",lead:"Katie",col:"#8b3ffc",
+  note:"<b>Long day — about 14 hours for a 5-year-old.</b> Hollywood Studios closes to day guests at 7:00 PM (party night), so Fantasmic! runs once at 6:30. If Bowie is done after Fantasmic!, one adult takes him back while the rest go on to Epcot.",ev:[
+  ["07:30","7:30 AM","Waldorf shuttle to Hollywood Studios","Reserve in advance; confirm first departure.","move"],
+  ["08:30","~8:30 AM","Early Entry → Slinky Dog Dash","38\". Opening time not posted yet — check the app.","ride",["sb"]],
+  ["09:15","9:15 AM","Alien Swirling Saucers","32\", next door in Toy Story Land.","ride",["sb"]],
+  ["10:00","10:00 AM","Toy Story Mania!","No height minimum.","ride",["mp"]],
+  ["10:45","10:45 AM","Millennium Falcon: Smugglers Run","38\". Bowie can be an engineer.","ride",["mp"]],
+  ["11:30","11:30 AM","Rise of the Resistance","Adults + London (40\"). Rider Switch: one adult explores Galaxy's Edge with Bowie, then rides.","ride",["sp"]],
+  ["12:20","12:20 PM","Check in at Hollywood & Vine","Lunch 12:35. Ask about the Fantasmic! seating voucher. Tell them Albert eats vegan.","food",["Reserved"]],
+  ["13:45","1:45 PM","Mickey & Minnie's Runaway Railway","No height minimum.","ride",["mp"]],
+  ["14:30","2:30 PM","Sit-down show (rest block)","Disney Jr. Live, Beauty and the Beast or Frozen Sing-Along — check times in the app.","show"],
+  ["15:30","3:30 PM","Split: Star Tours + big drops","Star Tours (40\") for London + adults; optional Tower of Terror (40\") and Rock 'n' Roller Coaster (48\") for adults. Bowie + adult: Little Mermaid or Toy Story Land.","split"],
+  ["16:45","4:45 PM","Snack, rest, Multi Pass repeats","Refill water.","rest"],
+  ["17:45","5:45 PM","Walk to Hollywood Hills Amphitheater","Follow the voucher's arrival time.","move"],
+  ["18:30","6:30 PM","Fantasmic!","Fire, loud bangs, a dragon — ear defenders for Bowie.","show",["Reserved"]],
+  ["19:00","7:00 PM","Hop to Epcot International Gateway","FriendShip boat (~25 min, seated), Skyliner (change at Caribbean Beach) or walk the BoardWalk.","move"],
+  ["19:45","~7:45 PM","Enter Epcot between UK and France","Park hopping is included.","fun"],
+  ["20:00","8:00 PM","Dinner at Epcot","Spice Road Table (Morocco) first choice, Rose & Crown backup, else Holiday Kitchens booths. Finish by 8:45.","food",["To book"]],
+  ["20:45","8:45 PM","Claim a spot at the lagoon rail","Kids need the front rail. Japan/Morocco waterfront, or the accessible area by Rose & Crown.","move"],
+  ["21:15","9:15 PM","Luminous: The Symphony of Us","Exit after via International Gateway.","show",["Fireworks"]],
+  ["21:45","~9:45 PM","Back to the Waldorf","Confirm the Epcot pickup point with the concierge, or Uber from the BoardWalk.","move"]]},
+ {id:"22",dow:"Tue",title:"Universal · day 2",kind:"Universal",lead:"Jason",col:"#10a99b",tbd:true,ev:[]},
+ {id:"23",dow:"Wed",title:"Fly home",kind:"Travel day",col:"#3d5afe",
+  note:"No park today: the 5:14 PM flight leaves too little time to be worth a ticket.",ev:[
+  ["08:30","8:30 AM","Slow breakfast at the hotel","","food"],
+  ["09:30","9:30 AM","Pool or a walk; finish packing","","rest"],
+  ["11:00","~11:00 AM","Check out, bags to the bell desk","Confirm checkout time; ask about late checkout.","travel"],
+  ["12:30","12:30 PM","Lunch at the hotel","","food"],
+  ["14:15","2:15 PM","Uber XL to MCO","","move"],
+  ["14:45","~2:45 PM","Bag drop and security","About 2.5 hours before departure.","travel"],
+  ["17:14","5:14 PM","AA 1165 · MCO → DCA","Lands 7:30 PM. Home sweet home!","travel"]]}
+];
+
+const SHOWS=[
+ ["19","8:00 PM","Happily Ever After","Magic Kingdom · Main Street facing the castle. In place by 7:20."],
+ ["19","~7:00 PM","Disney Starlight night parade","Frontierland or Liberty Square end, then walk to Main Street. Time not posted yet."],
+ ["20","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets, 30–60 min early."],
+ ["20","Dusk","The Magic of Christmas at Hogwarts Castle","Hogsmeade, Islands of Adventure. Repeats until close."],
+ ["21","6:30 PM","Fantasmic!","Hollywood Studios · reserved through our lunch package."],
+ ["21","9:15 PM","Luminous: The Symphony of Us","Epcot · World Showcase lagoon rail."]];
+
+// [ride, park, min inches (0 = none), note]
+const RIDES=[
+ ["Peter Pan's Flight","MK",0,""],["Dumbo","MK",0,""],["The Barnstormer","MK",35,""],["Seven Dwarfs Mine Train","MK",38,""],
+ ["Winnie the Pooh","MK",0,"Gentle"],["Haunted Mansion","MK",0,"Dark, spooky"],["Pirates of the Caribbean","MK",0,"Small drop"],
+ ["Big Thunder Mountain","MK",38,""],["Tiana's Bayou Adventure","MK",40,"50-ft drop, you get wet"],["Space Mountain","MK",44,"In the dark"],
+ ["Buzz Lightyear","MK",0,""],["PeopleMover","MK",0,""],
+ ["Toy Story Mania!","HS",0,""],["Runaway Railway","HS",0,""],["Alien Swirling Saucers","HS",32,"Spinning"],["Slinky Dog Dash","HS",38,"Family coaster"],
+ ["Smugglers Run","HS",38,"Motion simulator"],["Rise of the Resistance","HS",40,"Rider Switch"],["Star Tours","HS",40,"Motion simulator"],
+ ["Tower of Terror","HS",40,"Big drops + view from the top — likely a no for London"],["Rock 'n' Roller Coaster","HS",48,"Adults via Rider Switch"]];
+
+const TODO=[
+ ["dinner","Book Epcot dinner, Mon 21 Dec ~8:00 PM, party of 6","Spice Road Table, then Rose & Crown","Now"],
+ ["uni-tix","Confirm Universal tickets (Park-to-Park? Epic Universe?) + consider Express passes","Jason","Now"],
+ ["uni-din","Book Universal dinners for 20 and 22 Dec","Jason","Now"],
+ ["jane","Approve the reworked Magic Kingdom morning","Jane","Now"],
+ ["das","Decide on DAS for Bowie (video-chat registration open; party limit Bowie + 3)","","Now"],
+ ["shuttle","Reserve Waldorf shuttles: MK 6:45 AM 19 Dec · HS 7:30 AM 21 Dec · Epcot pickup after Luminous · Disney Springs 18 Dec","Ask where the MK shuttle drops","Before the trip"],
+ ["ll","Book Lightning Lanes for all 6","MK Multi Pass: Peter Pan, Pooh, Haunted Mansion + Seven Dwarfs Single Pass · HS Multi Pass: Toy Story Mania, Smugglers Run, Runaway Railway + Rise of the Resistance Single Pass","Tue 15 Dec · 7:00 AM ET / 13:00 Barcelona"],
+ ["hours","Check park hours and showtimes in the apps","Starlight parade, Festival of Fantasy, 21 Dec opening","Week before"],
+ ["pack","Pack ponchos, ear defenders for Fantasmic! and spare clothes for the kids","","Packing"]];
+
+const $=s=>document.querySelector(s), main=$("#main");
+const store={get(k,d){try{const v=localStorage.getItem("orl-"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("orl-"+k,JSON.stringify(v))}catch(e){}}};
+
+// Orlando clock
+function et(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{date:g("year")+"-"+g("month")+"-"+g("day"),min:+g("hour")*60+ +g("minute")}}
+const toMin=t=>{const[h,m]=t.split(":");return h*60+ +m};
+const todayId=()=>{const n=et();return n.date.startsWith("2026-12-")&&DAYS.some(d=>d.id===n.date.slice(8))?n.date.slice(8):null};
+
+let view=store.get("view","days"), day=todayId()||store.get("day","18"), rideF=store.get("rideF","all");
+const kids=store.get("kids",{L:44,B:38}), done=store.get("done",{});
+
+function av(k){const p=PEOPLE[k];return `<span class="av" style="--a:${p[1]}" title="${p[0]}">${p[0][0]}</span>`}
+const TAGS={mp:["mp","Multi Pass"],sp:["sp","Single Pass · paid"],sb:["sb","Standby"]};
+function tag(t){const x=TAGS[t];return x?`<span class="tag ${x[0]}">${x[1]}</span>`:`<span class="tag" style="--c:#e0a400">${t}</span>`}
+
+function renderDays(){
+  const tid=todayId();
+  $("#days").innerHTML=DAYS.map(d=>`<button class="day${d.id===day?" on":""}${d.id===tid?" today":""}" data-d="${d.id}" style="--dc:${d.col}"><small>${d.dow}</small><b>${d.id}</b><i></i></button>`).join("");
+}
+function countdown(){
+  const target=Date.UTC(2026,11,18,12,59); // 7:59 AM ET take-off
+  const ms=target-Date.now(); if(ms<=0) return "";
+  const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);
+  const u=(v,l,c)=>`<div class="cdu"><b style="--u:${c}">${v}</b><small>${l}</small></div>`;
+  return `<div class="cd" id="cd"><div class="l f">Take-off to Orlando in</div><div class="cdg">${u(d,"days","var(--pink)")}${u(h,"hours","var(--sky2)")}${u(m,"min","#10a99b")}</div><div class="h">Tap for fireworks</div></div>`;
+}
+function dayView(){
+  const d=DAYS.find(x=>x.id===day), n=et(), isToday=todayId()===d.id;
+  let nowI=-1; if(isToday) d.ev.forEach((e,i)=>{if(toMin(e[0])<=n.min) nowI=i});
+  let h=["17","18"].includes(day)?countdown():"";
+  h+=`<div class="dh rise" style="--dc:${d.col}"><small>${d.dow} ${d.id} Dec · ${d.kind}</small><h2>${d.title}</h2><div class="meta">${d.lead?`<span class="pill">Lead: ${d.lead}</span>`:""}<span class="pill">Orlando time</span></div></div>`;
+  if(d.note) h+=`<div class="note">${d.note}</div>`;
+  if(isToday&&d.ev[nowI+1]){const nx=d.ev[nowI+1];h+=`<div class="nextup"><div><small>Next up</small><b>${nx[2]}</b></div><b class="f">${nx[1]}</b></div>`}
+  if(d.tbd) h+=`<div class="empty rise"><h3>Jason is planning this one</h3><div class="sub">Tickets, rides and dinner coming soon. Uber both ways.</div></div>`;
+  h+=d.ev.map((e,i)=>{const cls=isToday?(i===nowI?" now":i<nowI?" past":""):"";const tg=(e[5]||[]).map(tag).join("")+(i===nowI&&isToday?`<span class="tag live">Now</span>`:"");
+    return `<div class="ev rise${cls}" style="--c:${COL[e[4]]};--d:${Math.min(i,10)*40}ms"><div class="time">${e[1].replace(/ (AM|PM)/,"<small>$1</small>")}</div><div><div class="title">${e[2]}</div>${e[3]?`<div class="sub">${e[3]}</div>`:""}${tg?`<div class="tags">${tg}</div>`:""}</div></div>`}).join("");
+  return h;
+}
+function showsView(){
+  return `<div class="note"><b>Saturday 19 is our only Magic Kingdom fireworks night.</b> MK closes early on 20 and 22 Dec for the Christmas party, with no fireworks. Check the apps the week before.</div>`+
+   SHOWS.map((s,i)=>{const d=DAYS.find(x=>x.id===s[0]);return `<div class="show rise" style="--d:${i*50}ms"><div class="d">${d.dow} ${s[0]} Dec</div><div class="t">${s[1]}</div><b>${s[2]}</b><span>${s[3]}</span></div>`}).join("");
+}
+function ridesView(){
+  const k=(id,name)=>`<div class="kid">${av(id)} <b>${name}</b><div class="step"><button class="btn" data-k="${id}" data-s="-1" aria-label="Shorter">−</button><output>${kids[id]}"</output><button class="btn" data-k="${id}" data-s="1" aria-label="Taller">+</button></div></div>`;
+  const f=[["all","All rides"],["MK","Magic Kingdom"],["HS","Hollywood Studios"]];
+  const list=RIDES.filter(r=>rideF==="all"||r[1]===rideF);
+  return `<div class="note">Set each kid's height — measure both at the park entrance. Bowie is about 38–39", London 44–47".</div>
+  <div class="kids">${k("L","London")}${k("B","Bowie")}</div>
+  <div class="chips">${f.map(x=>`<button class="chip${rideF===x[0]?" on":""}" data-f="${x[0]}">${x[1]}</button>`).join("")}</div>`+
+  list.map(r=>`<div class="ride"><div class="h">${r[2]?r[2]+'"':"Any"}</div><div class="n"><b>${r[0]}</b><small>${r[1]==="MK"?"Magic Kingdom":"Hollywood Studios"}${r[3]?" · "+r[3]:""}</small></div><div class="ok">${["L","B"].map(id=>`<span class="${kids[id]>=r[2]?"y":"n"}" title="${PEOPLE[id][0]}">${PEOPLE[id][0][0]}</span>`).join("")}</div></div>`).join("")+
+  `<p class="foot">Universal rides will be added once Jason's plan is in.</p>`;
+}
+function todoView(){
+  const n=TODO.filter(t=>done[t[0]]).length;
+  const ll=Date.UTC(2026,11,15,12,0)-Date.now();
+  return `${ll>0?`<div class="note"><b>Lightning Lanes open in ${Math.ceil(ll/864e5)} days</b> — Tue 15 Dec, 7:00 AM Orlando / 13:00 Barcelona. Waldorf guests book 3 days before check-in.</div>`:""}
+  <div class="f" style="font-weight:700">${n} of ${TODO.length} done</div><div class="bar"><i style="width:${n/TODO.length*100}%"></i></div>`+
+  TODO.map(t=>`<div class="todo${done[t[0]]?" done":""}" data-t="${t[0]}" role="checkbox" aria-checked="${!!done[t[0]]}" tabindex="0"><div class="bx">${done[t[0]]?"✓":""}</div><div class="tx"><span class="when">${t[3]}</span><b>${t[1]}</b>${t[2]?`<div class="sub">${t[2]}</div>`:""}</div></div>`).join("")+
+  `<p class="foot">Ticks are saved on this device only.</p>`;
+}
+function infoView(){
+  const r=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`;
+  return `<h2 class="sec" style="margin-top:4px">Who's coming</h2><div class="fam">${ALL.map(k=>{const p=PEOPLE[k];return `<div class="fm">${av(k)}<b>${p[0]}</b>${p[2]?`<small>age ${p[2]}</small>`:""}</div>`}).join("")}</div>
+  <h2 class="sec">Flights</h2>
+  <div class="card"><h3>Out · Fri 18 Dec</h3>${r("Flight","AA 1983")}${r("Route","DCA 7:59 AM → MCO 10:37 AM")}${r("Albert, London, Bowie","Booking 1")}${r("Jane, Jason, Katie","Booking 2")}</div>
+  <div class="card"><h3>Home · Wed 23 Dec</h3>${r("Flight","AA 1165")}${r("Route","MCO 5:14 PM → DCA 7:30 PM")}${r("Confirmation codes","In the AA booking emails")}</div>
+  <h2 class="sec">Hotel</h2>
+  <div class="card"><h3>Waldorf Astoria Orlando</h3>${r("Rooms","3 · 18–23 Dec")}${r("Address","14200 Bonnet Creek Resort Lane")}${r("Phone",'<a href="tel:+14075975500">407-597-5500</a>')}${r("Confirmation","In the booking email")}${r("Perk","30-min Early Entry at all 4 Disney parks, every day")}</div>
+  <h2 class="sec">Tickets & reservations</h2>
+  <div class="card">${r("Park tickets","Park Hopper · pick up at the Waldorf front desk (Gabrille)")}${r("Cinderella's Royal Table","Sat 19 · 8:05 AM · cancellable")}${r("Hollywood & Vine + Fantasmic!","Mon 21 · 12:35 PM · 6 guests")}${r("Confirmation","In the booking email")}${r("Epcot dinner","Mon 21 · to book")}</div>
+  <h2 class="sec">Getting around</h2>
+  <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber both ways")}${r("Airport","Uber XL / van for 6")}</div>
+  <h2 class="sec">Good to know</h2>
+  <div class="card">Albert eats vegan — tell every restaurant. Bring ponchos for Tiana's, ear defenders for Fantasmic!, and a change of clothes for the kids.</div>
+  <p class="foot">Updated ${UPDATED} · all times are Orlando time</p>`;
+}
+function render(){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.v===view));
+  $("#days").style.display=view==="days"?"":"none";
+  if(view==="days") renderDays();
+  main.innerHTML=({days:dayView,shows:showsView,rides:ridesView,todo:todoView,info:infoView})[view]();
+}
+
+// fireworks
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
+function boom(x,y){const cols=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#ffffff","#5cf2b0"];
+  for(let b=0;b<5;b++){const bx=x+(Math.random()-.5)*innerWidth*.7,by=y-Math.random()*innerHeight*.35,c=cols[b%cols.length];
+   for(let i=0;i<46;i++){const a=i/46*Math.PI*2,s=2+Math.random()*3.5;parts.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:60+Math.random()*30,c,dl:b*12})}}
+  if(!raf) tick()}
+function tick(){cv.width=innerWidth;cv.height=innerHeight;cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.l>0);parts.forEach(p=>{if(p.dl>0){p.dl--;return}p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.vx*=.985;p.l--;cx.globalAlpha=Math.min(1,p.l/40);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,2.4,0,7);cx.fill()});
+  raf=parts.length?requestAnimationFrame(tick):(cx.clearRect(0,0,cv.width,cv.height),0)}
+const calm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// events
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;view=b.dataset.v;store.set("view",view);render();scrollTo({top:$(".hero").offsetHeight,behavior:"smooth"})});
+$("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;day=b.dataset.d;store.set("day",day);render();b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});
+main.addEventListener("click",e=>{
+  const cd=e.target.closest("#cd"); if(cd&&!calm) boom(innerWidth/2,innerHeight*.55);
+  const k=e.target.closest("[data-k]"); if(k){kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
+  const f=e.target.closest("[data-f]"); if(f){rideF=f.dataset.f;store.set("rideF",rideF);render()}
+  const t=e.target.closest("[data-t]"); if(t){const id=t.dataset.t;done[id]=!done[id];store.set("done",done);render();
+    if(done[id]&&TODO.every(x=>done[x[0]])&&!calm) boom(innerWidth/2,innerHeight*.6)}
+});
+main.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&e.target.dataset.t){e.preventDefault();e.target.click()}});
+setInterval(()=>{if(view==="days"||view==="todo")render()},60000);
+
+render();
+setTimeout(()=>{const s=$("#splash");s.classList.add("out");setTimeout(()=>s.remove(),750)},1100);
+try{if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{})}catch(e){}
+}
+</script>
+</body>
+</html>
