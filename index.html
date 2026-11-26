@@ -176,7 +176,7 @@ canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-
 
 <div class="hero">
   <h1>Orlando Holiday Magic</h1>
-  <p>Katie · Albert · Jane · Jason · London · Bowie</p>
+  <p>Katie · Albert · Nonna · Jason · Mutaz · London · Bowie</p>
   <svg class="scene" viewBox="0 0 560 190" role="img" aria-label="A storybook castle under fireworks">
     <g fill="#fff"><use href="#star" class="tw" x="40" y="30"/><use href="#star" class="tw" x="510" y="24" style="animation-delay:.6s"/><use href="#star" class="tw" x="470" y="90" style="animation-delay:1.2s"/><use href="#star" class="tw" x="90" y="100" style="animation-delay:1.8s"/><use href="#star" class="tw" x="300" y="14" style="animation-delay:.9s"/></g>
     <use href="#fw" class="burst" x="120" y="50" stroke="#ffc53d"/>
@@ -209,25 +209,25 @@ canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-
 <script>
 {
 const UPDATED="26 Nov 2026";
-const PEOPLE={K:["Katie","#ff4f9a"],A:["Albert","#3d5afe"],Ja:["Jane","#8b3ffc"],Js:["Jason","#10a99b"],L:["London","#ff7a1a","8"],B:["Bowie","#e0a400","5"]};
-const ALL=["K","A","Ja","Js","L","B"];
+const PEOPLE={K:["Katie","#ff4f9a"],A:["Albert","#3d5afe"],Ja:["Nonna","#8b3ffc"],Js:["Jason","#10a99b"],M:["Mutaz","#1f9bea"],L:["London","#ff7a1a","8"],B:["Bowie","#e0a400","5"]};
+const ALL=["K","A","Ja","Js","M","L","B"];
 const COL={travel:"var(--c-travel)",food:"var(--c-food)",ride:"var(--c-ride)",show:"var(--c-show)",rest:"var(--c-rest)",move:"var(--c-move)",split:"var(--c-split)",fun:"var(--c-fun)"};
 
 // e = [24h time, label, title, sub, type, tags]
 const DAYS=[
  {id:"17",dow:"Thu",title:"Sleepover at Jason's",kind:"Night before",lead:"Jason",col:"#6b5cff",ev:[
   ["20:00","Evening","Night at Jason's","Bags packed, alarms set: we leave at 5:45 AM.","rest"]]},
- {id:"18",dow:"Fri",title:"Fly to Orlando",kind:"Arrival day",col:"#1f9bea",
+ {id:"18",dow:"Fri",title:"Fly in + Epcot evening",kind:"Arrival day",col:"#1f9bea",
   note:"<b>Keep it easy today.</b> Tomorrow starts at 6:45 AM for the castle breakfast.",ev:[
   ["05:45","5:45 AM","Leave Jason's for DCA","Adjust for the drive; the flight boards around 7:30.","travel"],
   ["07:59","7:59 AM","AA 1983 · DCA → MCO","Both bookings on the same flight.","travel",["Lands 10:37"]],
-  ["10:37","10:37 AM","Land at MCO, bags, ride for 6","Ask for an XL vehicle. Bring Bowie's booster if he uses one.","move"],
+  ["10:37","10:37 AM","Land at MCO, bags, ride for 7","An Uber XL only seats 6, so book a van or two cars. Bring Bowie's booster if he uses one.","move"],
   ["11:45","~11:45 AM","Arrive at the Waldorf, drop bags","Rooms may not be ready until the afternoon.","travel"],
   ["12:00","12:00 PM","Lunch + pick up park tickets","Front desk (Gabrille). Book all the shuttles at the same time.","food"],
   ["13:30","1:30 PM","Pool, check in, nap for Bowie","Until about 4:30.","rest"],
-  ["17:30","5:30 PM","Shuttle to Disney Springs","Christmas trees and lights, casual dinner.","fun"],
-  ["20:00","8:00 PM","Back to the hotel","Lay out clothes for the morning. Bed early!","rest"]]},
- {id:"19",dow:"Sat",title:"Magic Kingdom",kind:"Castle day",lead:"Jane",col:"#ff4f9a",
+  ["17:30","5:30 PM","Shuttle to Epcot","Holiday festival around World Showcase, festive food booths, casual dinner.","fun"],
+  ["20:00","~8:00 PM","Back to the hotel","Lay out clothes for the morning. Bed early! Staying for Luminous means a 9:15 PM show, late before a 6:45 AM start.","rest"]]},
+ {id:"19",dow:"Sat",title:"Magic Kingdom",kind:"Castle day",lead:"Nonna",col:"#ff4f9a",
   note:"<b>Fireworks night!</b> Happily Ever After at 8:00 PM, our one Magic Kingdom fireworks night. Breakfast guests use a separate entrance before opening, so no Early Entry needed. If Bowie runs out of steam, 1:15–2:45 can become a hotel break.",ev:[
   ["06:45","6:45 AM","Waldorf shuttle (or Uber) to Magic Kingdom","Ask the concierge where it drops. If at the Ticket & Transportation Center, add ~20 min for monorail or ferry.","move"],
   ["07:35","7:35 AM","At the gate, dining-reservation entrance","Castle photos on an empty Main Street.","fun"],
@@ -304,13 +304,13 @@ const RIDES=[
  ["Tower of Terror","HS",40,"Big drops + view from the top — likely a no for London"],["Rock 'n' Roller Coaster","HS",48,"Adults via Rider Switch"]];
 
 const TODO=[
- ["dinner","Book Epcot dinner, Mon 21 Dec ~8:00 PM, party of 6","Spice Road Table, then Rose & Crown","Now"],
+ ["dinner","Book Epcot dinner, Mon 21 Dec ~8:00 PM, party of 7","Spice Road Table, then Rose & Crown","Now"],
  ["uni-tix","Confirm Universal tickets (Park-to-Park? Epic Universe?) + consider Express passes","Jason","Now"],
  ["uni-din","Book Universal dinners for 20 and 22 Dec","Jason","Now"],
- ["jane","Approve the reworked Magic Kingdom morning","Jane","Now"],
+ ["jane","Approve the reworked Magic Kingdom morning","Nonna","Now"],
  ["das","Decide on DAS for Bowie (video-chat registration open; party limit Bowie + 3)","","Now"],
- ["shuttle","Reserve Waldorf shuttles: MK 6:45 AM 19 Dec · HS 7:30 AM 21 Dec · Epcot pickup after Luminous · Disney Springs 18 Dec","Ask where the MK shuttle drops","Before the trip"],
- ["ll","Book Lightning Lanes for all 6","MK Multi Pass: Peter Pan, Pooh, Haunted Mansion + Seven Dwarfs Single Pass · HS Multi Pass: Toy Story Mania, Smugglers Run, Runaway Railway + Rise of the Resistance Single Pass","Tue 15 Dec · 7:00 AM ET / 13:00 Barcelona"],
+ ["shuttle","Reserve Waldorf shuttles: MK 6:45 AM 19 Dec · HS 7:30 AM 21 Dec · Epcot pickup after Luminous on 21 Dec · Epcot there and back on 18 Dec","Ask where the MK shuttle drops","Before the trip"],
+ ["ll","Book Lightning Lanes for everyone","MK Multi Pass: Peter Pan, Pooh, Haunted Mansion + Seven Dwarfs Single Pass · HS Multi Pass: Toy Story Mania, Smugglers Run, Runaway Railway + Rise of the Resistance Single Pass","Tue 15 Dec · 7:00 AM ET / 13:00 Barcelona"],
  ["hours","Check park hours and showtimes in the apps","Starlight parade, Festival of Fantasy, 21 Dec opening","Week before"],
  ["pack","Pack ponchos, ear defenders for Fantasmic! and spare clothes for the kids","","Packing"]];
 
@@ -378,14 +378,14 @@ function infoView(){
   const r=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`;
   return `<h2 class="sec" style="margin-top:4px">Who's coming</h2><div class="fam">${ALL.map(k=>{const p=PEOPLE[k];return `<div class="fm">${av(k)}<b>${p[0]}</b>${p[2]?`<small>age ${p[2]}</small>`:""}</div>`}).join("")}</div>
   <h2 class="sec">Flights</h2>
-  <div class="card"><h3>Out · Fri 18 Dec</h3>${r("Flight","AA 1983")}${r("Route","DCA 7:59 AM → MCO 10:37 AM")}${r("Albert, London, Bowie","Booking 1")}${r("Jane, Jason, Katie","Booking 2")}</div>
+  <div class="card"><h3>Out · Fri 18 Dec</h3>${r("Flight","AA 1983")}${r("Route","DCA 7:59 AM → MCO 10:37 AM")}${r("Albert, London, Bowie","Booking 1")}${r("Nonna, Jason, Katie","Booking 2")}</div>
   <div class="card"><h3>Home · Wed 23 Dec</h3>${r("Flight","AA 1165")}${r("Route","MCO 5:14 PM → DCA 7:30 PM")}${r("Confirmation codes","In the AA booking emails")}</div>
   <h2 class="sec">Hotel</h2>
   <div class="card"><h3>Waldorf Astoria Orlando</h3>${r("Rooms","3 · 18–23 Dec")}${r("Address","14200 Bonnet Creek Resort Lane")}${r("Phone",'<a href="tel:+14075975500">407-597-5500</a>')}${r("Confirmation","In the booking email")}${r("Perk","30-min Early Entry at all 4 Disney parks, every day")}</div>
   <h2 class="sec">Tickets & reservations</h2>
   <div class="card">${r("Park tickets","Park Hopper · pick up at the Waldorf front desk (Gabrille)")}${r("Cinderella's Royal Table","Sat 19 · 8:05 AM · cancellable")}${r("Hollywood & Vine + Fantasmic!","Mon 21 · 12:35 PM · 6 guests")}${r("Confirmation","In the booking email")}${r("Epcot dinner","Mon 21 · to book")}</div>
   <h2 class="sec">Getting around</h2>
-  <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber both ways")}${r("Airport","Uber XL / van for 6")}</div>
+  <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber both ways")}${r("Airport","Van or two cars for 7")}</div>
   <h2 class="sec">Good to know</h2>
   <div class="card">Albert eats vegan — tell every restaurant. Bring ponchos for Tiana's, ear defenders for Fantasmic!, and a change of clothes for the kids.</div>
   <p class="foot">Updated ${UPDATED} · all times are Orlando time</p>`;
