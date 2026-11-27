@@ -1,6 +1,6 @@
 // Offline support: page fetched fresh when online, everything else from cache
-const V="xmas26-20261127n";
-const FILES=["./","index.html","manifest.webmanifest","xmas2-icon-180.png","xmas2-icon-192.png","xmas2-icon-512.png","img/katie.jpg","img/albert.jpg","img/nonna.jpg","img/jason.jpg","img/london.jpg","img/bowie.jpg"];
+const V="xmas26-20261127o";
+const FILES=["./","index.html","manifest.webmanifest","xmas3-icon-180.png","xmas3-icon-192.png","xmas3-icon-512.png","img/katie.jpg","img/albert.jpg","img/nonna.jpg","img/jason.jpg","img/london.jpg","img/bowie.jpg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{const u=new URL(e.request.url);if(e.request.method!=="GET"||u.origin!==location.origin)return;
