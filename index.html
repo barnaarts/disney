@@ -10,8 +10,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1a2c95">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="xmas-icon-180.png">
+<link rel="apple-touch-icon" href="xmas-icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="xmas-icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
@@ -222,6 +223,16 @@ canvas#snowc{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none
 .fabs{z-index:7!important}
 .sfx{position:fixed;z-index:60;transform:translate(-50%,0);background:#fff;color:#1d1a3a;font:28px/1 var(--fd);padding:8px 10px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;animation:sfxup 1.3s ease-out forwards}
 @keyframes sfxup{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}15%{opacity:1;transform:translate(-50%,-10px) scale(1.1)}70%{opacity:1;transform:translate(-50%,-30px) scale(1)}100%{opacity:0;transform:translate(-50%,-50px)}}
+#inst{position:fixed;inset:0;z-index:95;background:rgba(10,14,50,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+#inst[hidden]{display:none}
+.ib{background:var(--bg);width:100%;max-width:440px;border-radius:26px;padding:22px 20px 18px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.35);animation:rise .4s ease}
+.ib img{border-radius:18px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.ib h3{font-size:22px;margin:10px 0 6px}
+.steps,.card ol.steps{text-align:left;margin:8px 0 12px;padding:0;list-style:none;counter-reset:s;font-style:normal}
+.steps li{display:flex;gap:10px;align-items:center;padding:7px 0;font-size:15.5px;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:0}
+.steps li::before{counter-increment:s;content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;background:var(--pink);color:#fff;font:700 14px/26px var(--fd);text-align:center}
+.steps b{white-space:nowrap}
 canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
 /* castle magic */
 .magic{position:fixed;inset:0;z-index:80;background:rgba(4,6,28,0);transition:background 2.7s ease;cursor:pointer}
@@ -333,6 +344,10 @@ body.g-open{overflow:hidden}
   <div class="g-top"><button id="g-x" aria-label="Close games">✕</button><div class="g-t" id="g-title"></div><button id="g-next">Next ▸</button></div>
   <div class="g-body" id="g-body"></div>
 </div>
+<div id="inst" hidden><div class="ib" role="dialog" aria-label="Get the app">
+  <img src="xmas-icon-180.png" alt="" width="72" height="72"><h3>Put Disney Xmas'26 on your phone</h3>
+  <div id="inst-steps"></div>
+  <button class="g-btn" id="inst-ok">Got it</button></div></div>
 <canvas id="fx"></canvas>
 <canvas id="snowc" aria-hidden="true"></canvas>
 <canvas id="drift" aria-hidden="true"></canvas>
@@ -640,6 +655,7 @@ function infoView(){
   <div class="card"><h3>Pick up</h3>Ticket Services Desk, open daily 8:00 AM–5:00 PM. Collect the physical ticket confirmations, complimentary restaurant coupons and the <b>Disney Early Entry cards</b>. Keep the original confirmation emails handy.</div>
   <div class="card"><h3>Universal tickets in the app</h3><ol><li>Download the Universal Orlando Resort app.</li><li>Sign in or create a Universal account.</li><li>Go to Profile → Wallet.</li><li>Choose to scan or add a ticket.</li><li>Scan the barcode/QR on the confirmation, or type the ticket number.</li><li>The ticket appears in your wallet.</li></ol></div>
   <h2 class="sec" id="s-apps">Apps to get</h2>
+  <div class="card"><h3>This app on your phone</h3>${installed()?"<p class=\"sub\" style=\"margin:0\">Already on your home screen ✓</p>":stepsHTML()}<p class="sub" style="margin:0">If the icon looks old, delete it from the home screen and add it again.</p></div>
   <div class="card applinks"><a href="https://apps.apple.com/us/app/my-disney-experience/id547436543" target="_blank" rel="noopener"><b>My Disney Experience</b><small>Disney tickets, Lightning Lanes, mobile food orders, wait times</small><span>Get on iPhone ›</span></a>
   <a href="https://apps.apple.com/us/app/universal-orlando-resort/id878217080" target="_blank" rel="noopener"><b>Universal Orlando Resort</b><small>Universal tickets in the wallet, maps, show times, food orders</small><span>Get on iPhone ›</span></a></div>
   <h2 class="sec" id="s-food">Restaurants</h2>
@@ -1057,7 +1073,14 @@ $("#snow2").innerHTML=flakes(60);
     requestAnimationFrame(loop)};requestAnimationFrame(loop)}
 render();
 const sp=$("#splash");let gone=false;
-function enter(withSound){if(gone)return;gone=true;if(withSound){buzz();sparkle();if(!calm)boom(innerWidth/2,innerHeight*.5)}sp.classList.add("out");setTimeout(()=>sp.remove(),750)}
+const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const installed=()=>{try{return navigator.standalone||matchMedia("(display-mode: standalone)").matches}catch(e){return false}};
+const stepsHTML=()=>isIOS?`<ol class="steps"><li><span>Open <b>barnaarts.github.io/disney</b> in <b>Safari</b></span></li><li><span>Tap the <b>Share</b> button (square with an arrow ↑)</span></li><li><span>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b></span></li></ol>`
+ :`<ol class="steps"><li><span>Open <b>barnaarts.github.io/disney</b> in <b>Chrome</b></span></li><li><span>Tap the <b>⋮</b> menu at the top right</span></li><li><span>Tap <b>Add to Home screen</b> or <b>Install app</b></span></li></ol>`;
+function showInstall(){$("#inst-steps").innerHTML=stepsHTML();$("#inst").hidden=false}
+$("#inst-ok").addEventListener("click",()=>{buzz();$("#inst").hidden=true;store.set("instSeen",1)});
+$("#inst").addEventListener("click",e=>{if(e.target.id==="inst"){$("#inst").hidden=true;store.set("instSeen",1)}});
+function enter(withSound){if(gone)return;gone=true;if(withSound){buzz();sparkle();if(!calm)boom(innerWidth/2,innerHeight*.5)}sp.classList.add("out");setTimeout(()=>sp.remove(),750);if(!installed()&&!store.get("instSeen",0))setTimeout(showInstall,1400)}
 sp.addEventListener("click",()=>enter(true));
 sp.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")enter(true)});
 setTimeout(()=>enter(false),6000);
