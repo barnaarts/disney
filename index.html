@@ -217,6 +217,8 @@ h2.sec{font-size:22px;margin:24px 0 10px}
 .sr mark{background:color-mix(in srgb,var(--gold) 55%,transparent);color:inherit;border-radius:3px}
 canvas#snowc{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:6}
 .fabs{z-index:7!important}
+.sfx{position:fixed;z-index:60;transform:translate(-50%,0);background:#fff;color:#1d1a3a;font:700 15px var(--fd);padding:6px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;animation:sfxup 1.3s ease-out forwards}
+@keyframes sfxup{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}15%{opacity:1;transform:translate(-50%,-10px) scale(1.1)}70%{opacity:1;transform:translate(-50%,-30px) scale(1)}100%{opacity:0;transform:translate(-50%,-50px)}}
 canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
 /* castle magic */
 .magic{position:fixed;inset:0;z-index:80;background:rgba(4,6,28,0);transition:background 2.7s ease;cursor:pointer}
@@ -285,13 +287,13 @@ body.g-open{overflow:hidden}
 </defs></svg>
 
 <div id="splash" role="button" tabindex="0" aria-label="Start"><div class="snow" id="snow2" aria-hidden="true"></div><div class="in">
-  <svg viewBox="20 0 172 156" aria-hidden="true"><use href="#castle"/></svg>
+  <svg viewBox="20 -14 172 172" aria-hidden="true"><use href="#castle"/></svg>
   <div class="w">Disney Xmas'26</div><div class="s">Orlando · 18–23 Dec 2026</div>
   <div class="go">Tap to start the magic</div>
 </div></div>
 
 <div class="hero">
-  <svg class="scene" id="scene" viewBox="0 0 560 190" role="button" aria-label="Castle: tap for magic, double-tap for games">
+  <svg class="scene" id="scene" viewBox="0 -18 560 208" role="button" aria-label="Castle: tap for magic, double-tap for games">
     <g fill="#fff"><use href="#star" class="tw" x="40" y="30"/><use href="#star" class="tw" x="510" y="24" style="animation-delay:.6s"/><use href="#star" class="tw" x="470" y="90" style="animation-delay:1.2s"/><use href="#star" class="tw" x="90" y="100" style="animation-delay:1.8s"/><use href="#star" class="tw" x="300" y="14" style="animation-delay:.9s"/></g>
     <use href="#fw" class="burst" x="120" y="50" stroke="#ffc53d"/>
     <use href="#fw" class="burst" x="430" y="46" stroke="#ff4f9a" style="animation-delay:1.1s"/>
@@ -495,26 +497,47 @@ function bang(v){const a=ac();if(!a)return;v=v||.5;const t=a.currentTime;
 function yeehaw(){try{const a=ac();if(a){const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(500,t);o.frequency.exponentialRampToValueAtTime(1500,t+.35);o.frequency.exponentialRampToValueAtTime(700,t+.6);
     g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.06,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+.65);o.connect(g).connect(a.destination);o.start(t);o.stop(t+.7)}}catch(e){}
 }
-function jet(){const a=ac();if(!a)return;const t=a.currentTime;
+function jet(){const a=ac();if(!a)return;const t=a.currentTime;const M=a.createGain(),L=a.createDynamicsCompressor();M.gain.value=4;L.threshold.value=-8;L.ratio.value=12;M.connect(L).connect(a.destination);
   const w=a.createBufferSource(),wf=a.createBiquadFilter(),wg=a.createGain();w.buffer=noise();w.loop=true;wf.type="bandpass";wf.Q.value=.7;
-  wf.frequency.setValueAtTime(300,t);wf.frequency.linearRampToValueAtTime(900,t+1.2);wf.frequency.linearRampToValueAtTime(250,t+2.8);
-  wg.gain.setValueAtTime(.0001,t);wg.gain.exponentialRampToValueAtTime(.35,t+.6);wg.gain.exponentialRampToValueAtTime(.0001,t+2.9);w.connect(wf).connect(wg).connect(a.destination);w.start(t);w.stop(t+3);
+  wf.frequency.setValueAtTime(300,t);wf.frequency.linearRampToValueAtTime(900,t+1.2);wf.frequency.linearRampToValueAtTime(250,t+3.8);
+  wg.gain.setValueAtTime(.0001,t);wg.gain.exponentialRampToValueAtTime(.35,t+.6);wg.gain.exponentialRampToValueAtTime(.0001,t+3.9);w.connect(wf).connect(wg).connect(M);w.start(t);w.stop(t+4);
   const j=a.createBufferSource(),jf=a.createBiquadFilter(),jg=a.createGain();j.buffer=noise();j.loop=true;jf.type="highpass";jf.frequency.setValueAtTime(2500,t+.3);jf.frequency.exponentialRampToValueAtTime(700,t+2.4);
-  jg.gain.setValueAtTime(.0001,t+.3);jg.gain.exponentialRampToValueAtTime(.18,t+1.2);jg.gain.exponentialRampToValueAtTime(.0001,t+2.6);j.connect(jf).connect(jg).connect(a.destination);j.start(t+.3);j.stop(t+2.7);
+  jg.gain.setValueAtTime(.0001,t+.3);jg.gain.exponentialRampToValueAtTime(.18,t+1.2);jg.gain.exponentialRampToValueAtTime(.0001,t+2.6);j.connect(jf).connect(jg).connect(M);j.start(t+.3);j.stop(t+2.7);
   const o=a.createOscillator(),og=a.createGain();o.type="sawtooth";o.frequency.setValueAtTime(190,t+.3);o.frequency.exponentialRampToValueAtTime(110,t+2.4);
-  og.gain.setValueAtTime(.0001,t+.3);og.gain.exponentialRampToValueAtTime(.025,t+1.2);og.gain.exponentialRampToValueAtTime(.0001,t+2.5);o.connect(og).connect(a.destination);o.start(t+.3);o.stop(t+2.6)}
-function funny(){const a=ac();if(!a)return;const t=a.currentTime,n=Math.random()*7|0;
-  const osc=(type,f0,f1,dur,vol,at,q)=>{const o=a.createOscillator(),gg=a.createGain();o.type=type;o.frequency.setValueAtTime(f0,t+at);o.frequency.exponentialRampToValueAtTime(f1,t+at+dur);
-    gg.gain.setValueAtTime(.0001,t+at);gg.gain.exponentialRampToValueAtTime(vol,t+at+.015);gg.gain.exponentialRampToValueAtTime(.0001,t+at+dur);
-    let node=o;if(q){const fl=a.createBiquadFilter();fl.type="bandpass";fl.frequency.value=q;fl.Q.value=3;o.connect(fl);node=fl}node.connect(gg).connect(a.destination);o.start(t+at);o.stop(t+at+dur+.05)};
-  if(n===0){osc("sawtooth",620,380,.16,.35,0,1100);osc("sawtooth",600,360,.18,.35,.22,1100)} // duck
-  else if(n===1){for(let i=0;i<5;i++)osc("sine",2400+Math.random()*600,3900+Math.random()*600,.07,.12,i*.09)} // bird
-  else if(n===2){osc("square",330,300,.32,.12,0);osc("square",415,380,.32,.08,0)} // car horn
-  else if(n===3){const o=a.createOscillator(),gg=a.createGain(),lf=a.createOscillator(),lg=a.createGain();o.type="sine";o.frequency.setValueAtTime(300,t);o.frequency.exponentialRampToValueAtTime(90,t+.6);
-    lf.frequency.value=14;lg.gain.value=40;lf.connect(lg).connect(o.frequency);gg.gain.setValueAtTime(.3,t);gg.gain.exponentialRampToValueAtTime(.0001,t+.65);o.connect(gg).connect(a.destination);o.start(t);lf.start(t);o.stop(t+.7);lf.stop(t+.7)} // boing
-  else if(n===4){osc("sine",1100,1900,.12,.18,0);osc("sine",1900,1200,.12,.18,.13)} // squeaky toy
-  else if(n===5){osc("triangle",180,520,.18,.25,0);osc("triangle",520,160,.25,.25,.2)} // slide up and down
-  else {osc("sawtooth",160,150,.12,.3,0,700);osc("sawtooth",230,215,.35,.3,.14,700)}} // clown horn honk-honk
+  og.gain.setValueAtTime(.0001,t+.3);og.gain.exponentialRampToValueAtTime(.025,t+1.2);og.gain.exponentialRampToValueAtTime(.0001,t+2.5);o.connect(og).connect(M);o.start(t+.3);o.stop(t+2.6)}
+const SFX=(()=>{
+  const env=(a,g,t,at,vol,dur)=>{g.gain.setValueAtTime(.0001,t+at);g.gain.exponentialRampToValueAtTime(vol,t+at+.015);g.gain.exponentialRampToValueAtTime(.0001,t+at+dur)};
+  const osc=(type,f0,f1,dur,vol,at,bp,lp,vib)=>{const a=ac(),t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f0,t+at);o.frequency.exponentialRampToValueAtTime(f1,t+at+dur);
+    let n=o;if(bp){const f=a.createBiquadFilter();f.type="bandpass";f.frequency.value=bp;f.Q.value=3;n.connect(f);n=f}if(lp){const f=a.createBiquadFilter();f.type="lowpass";f.frequency.value=lp;n.connect(f);n=f}
+    if(vib){const v=a.createOscillator(),vg=a.createGain();v.frequency.value=vib[0];vg.gain.value=vib[1];v.connect(vg).connect(o.frequency);v.start(t+at);v.stop(t+at+dur+.05)}
+    env(a,g,t,at,vol,dur);n.connect(g).connect(a.destination);o.start(t+at);o.stop(t+at+dur+.05)};
+  const hiss=(dur,vol,at,type,f)=>{const a=ac(),t=a.currentTime,s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain();s.buffer=noise();fl.type=type;fl.frequency.value=f;env(a,g,t,at,vol,dur);s.connect(fl).connect(g).connect(a.destination);s.start(t+at,Math.random()*.5);s.stop(t+at+dur+.05)};
+  return [
+   ["🦆 Quack",()=>{osc("sawtooth",620,380,.16,.35,0,1100);osc("sawtooth",600,360,.18,.35,.22,1100)}],
+   ["🐦 Tweet",()=>{for(let i=0;i<5;i++)osc("sine",2400+Math.random()*600,3900+Math.random()*600,.07,.12,i*.09)}],
+   ["📯 Honk",()=>{osc("square",330,300,.32,.12,0);osc("square",415,380,.32,.08,0)}],
+   ["🌀 Boing",()=>osc("sine",300,90,.6,.3,0,0,0,[14,40])],
+   ["🧸 Squeak",()=>{osc("sine",1100,1900,.12,.18,0);osc("sine",1900,1200,.12,.18,.13)}],
+   ["🤡 Honk honk",()=>{osc("sawtooth",160,150,.12,.3,0,700);osc("sawtooth",230,215,.35,.3,.14,700)}],
+   ["🐱 Meow",()=>osc("sawtooth",480,760,.55,.25,0,1600,0,[6,20])],
+   ["🐶 Woof",()=>{osc("sawtooth",260,170,.13,.4,0,700);hiss(.1,.25,0,"bandpass",900);osc("sawtooth",250,160,.13,.4,.22,700);hiss(.1,.25,.22,"bandpass",900)}],
+   ["🐄 Moo",()=>osc("sawtooth",140,105,1.1,.35,0,0,600,[5,4])],
+   ["🐸 Ribbit",()=>{for(let i=0;i<6;i++)osc("square",150,135,.035,.2,i*.045,500);for(let i=0;i<5;i++)osc("square",180,160,.035,.2,.35+i*.045,500)}],
+   ["🦉 Hoo hoo",()=>{osc("sine",420,380,.28,.3,0);osc("sine",400,360,.45,.3,.38)}],
+   ["🐷 Oink",()=>{osc("sawtooth",300,210,.16,.35,0,900,0,[40,30]);osc("sawtooth",290,200,.18,.35,.22,900,0,[40,30])}],
+   ["🐑 Baa",()=>osc("sawtooth",360,330,.7,.3,0,1300,0,[9,18])],
+   ["🐓 Cock-a-doodle",()=>{[[500,620,.12],[620,560,.12],[560,760,.14],[760,520,.5]].forEach((x,i)=>osc("sawtooth",x[0],x[1],x[2],.25,[0,.14,.28,.44][i],1500))}],
+   ["🐘 Toot",()=>osc("sawtooth",250,520,.6,.25,0,900,0,[7,25])],
+   ["💨 Pfffrt",()=>osc("sawtooth",95,70,.55,.45,0,0,450,[28,22])],
+   ["🔫 Pew pew",()=>{osc("square",1600,180,.22,.15,0);osc("square",1500,160,.22,.15,.26)}],
+   ["🕰️ Cuckoo",()=>{osc("sine",760,740,.18,.3,0);osc("sine",610,600,.3,.3,.22);osc("sine",760,740,.18,.3,.65);osc("sine",610,600,.3,.3,.87)}],
+   ["🔔 Ding dong",()=>{osc("sine",660,655,.9,.3,0);osc("sine",523,520,1.3,.3,.45)}],
+   ["🚨 Wee-woo",()=>{for(let i=0;i<3;i++){osc("sine",650,950,.3,.2,i*.6);osc("sine",950,650,.3,.2,i*.6+.3)}}],
+   ["💋 Smack",()=>{osc("sine",1400,300,.08,.4,0);hiss(.04,.3,0,"highpass",2000)}],
+   ["🤧 Achoo",()=>{osc("sine",500,900,.35,.15,0);hiss(.35,.5,.4,"bandpass",2500)}]]})();
+const PSOUND={};shuffle([...SFX.keys()]).slice(0,ALL.length).forEach((n,i)=>PSOUND[ALL[i]]=n);
+function popLabel(el,txt){const r=el.getBoundingClientRect(),b=document.createElement("div");b.className="sfx";b.textContent=txt;b.style.left=(r.left+r.width/2)+"px";b.style.top=(r.top+10)+"px";document.body.appendChild(b);setTimeout(()=>b.remove(),1300)}
+function funny(k){if(!ac())return;const s=SFX[PSOUND[k]!=null?PSOUND[k]:Math.random()*SFX.length|0];s[1]();return s[0]}
 function whistle(){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(900,t);o.frequency.exponentialRampToValueAtTime(2400,t+.5);
   g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+.55);o.connect(g).connect(a.destination);o.start(t);o.stop(t+.6)}
 
@@ -566,7 +589,7 @@ function showsView(){
    SHOWS.map((s,i)=>{const d=DAYS.find(x=>x.id===s[0]);return (i&&SHOWS[i-1][0]!==s[0]?'<div class="dsep"></div>':'')+`<div class="show rise" data-fx="${s[4]}" style="--d:${i*50}ms"><div class="d">${d.dow} ${s[0]} Dec</div><div class="t">${s[1]}</div><b>${s[2]}</b><span>${s[3]}</span><div class="em">${ART[s[2]]||"✨"}</div></div>`}).join("");
 }
 function ridesView(){
-  const k=id=>`<div class="kid" style="--a:${PEOPLE[id][1]}"><div class="ph">${av(id)}<div class="ph-nm"><b>${PEOPLE[id][0]}</b></div></div><div class="step"><button class="btn" data-k="${id}" data-s="-1" aria-label="Shorter">−</button><output>${kids[id]}"</output><button class="btn" data-k="${id}" data-s="1" aria-label="Taller">+</button></div></div>`;
+  const k=id=>`<div class="kid" style="--a:${PEOPLE[id][1]}"><div class="ph" data-p="${id}">${av(id)}<div class="ph-nm"><b>${PEOPLE[id][0]}</b></div></div><div class="step"><button class="btn" data-k="${id}" data-s="-1" aria-label="Shorter">−</button><output>${kids[id]}"</output><button class="btn" data-k="${id}" data-s="1" aria-label="Taller">+</button></div></div>`;
   const f=[["all","All"],["MK","Magic Kingdom"],["HS","Hollywood Studios"]];
   const nm=x=>x.replace(/^The /,"");const list=RIDES.filter(r=>rideF==="all"||r[1]===rideF).sort((a,b)=>nm(a[0]).localeCompare(nm(b[0])));
   return `<div class="note">Set each kid's height — measure both at the park entrance. Bowie is about 38–39", London 44–47".</div>
@@ -600,7 +623,7 @@ function drawMap(){loadLeaflet(()=>{const el=$("#map");if(!el||!window.L)return;
   LM.fitBounds(L.latLngBounds(PLACES.map(p=>[p[2],p[3]])),{padding:[24,24]})})}
 function infoView(){
   const r=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`;
-  return `<h2 class="sec" id="s-who" style="margin-top:4px">Who's coming</h2><div class="fam">${shuffle(ALL).map(k=>{const p=PEOPLE[k];return `<div class="fm" style="--a:${p[1]}">${av(k)}${p[2]?`<span class="age">${p[2]}</span>`:""}<div class="ph-nm"><b>${p[0]}</b></div></div>`}).join("")}</div>
+  return `<h2 class="sec" id="s-who" style="margin-top:4px">Who's coming</h2><div class="fam">${shuffle(ALL).map(k=>{const p=PEOPLE[k];return `<div class="fm" data-p="${k}" style="--a:${p[1]}">${av(k)}${p[2]?`<span class="age">${p[2]}</span>`:""}<div class="ph-nm"><b>${p[0]}</b></div></div>`}).join("")}</div>
   <h2 class="sec" id="s-flights">Flights</h2>
   <div class="card"><h3>Out · Fri 18 Dec</h3>${r("Flight","AA 1983")}${r("Route","DCA 7:59 AM → MCO 10:37 AM")}${r("Albert, London, Bowie",code("out1"))}${r("Nonna, Jason, Katie",code("out2"))}</div>
   <div class="card"><h3>Home · Wed 23 Dec</h3>${r("Flight","AA 1165")}${r("Route","MCO 5:14 PM → DCA 7:30 PM")}${r("Bookings","Same as outbound")}</div>
@@ -656,12 +679,15 @@ function star4(x,y,r){cx.beginPath();cx.moveTo(x,y-r);cx.lineTo(x+r*.28,y-r*.28)
 let blowing=false;
 function blowAway(){if(blowing)return;blowing=true;const H=innerHeight;
   const castle=$(".hero .scene");if(castle&&castle.getBoundingClientRect().bottom>0)castle.animate([{transform:"rotate(0)"},{transform:"rotate(3deg)",offset:.2},{transform:"rotate(-1.5deg)",offset:.45},{transform:"rotate(2.5deg)",offset:.65},{transform:"rotate(0)"}],{duration:4200,delay:600,easing:"ease-in-out"});
-  const els=[...document.querySelectorAll(".hero h1,.hero .hint,.tab,.day,.cd,.cdline,.dh,.note,.nextup,.ev,.fab")].filter(el=>{const r=el.getBoundingClientRect();return r.bottom>0&&r.top<H&&r.width>0});
+  const vis=el=>{const r=el.getBoundingClientRect();return r.bottom>0&&r.top<H&&r.width>0};
   let longest=0;
-  els.forEach(el=>{const delay=1000+Math.random()*1100,out=500+Math.random()*500,gone=300+Math.random()*900,back=1800+Math.random()*1600,tot=out+gone+back,rot=(Math.random()*16-4);
+  [...document.querySelectorAll(".day")].filter(vis).forEach(el=>{const delay=1000+Math.random()*1100,out=500+Math.random()*500,gone=300+Math.random()*900,back=1800+Math.random()*1600,tot=out+gone+back,rot=(Math.random()*16-4);
     longest=Math.max(longest,delay+tot);
     el.animate([{transform:"translateX(0) rotate(0)",easing:"cubic-bezier(.5,0,.9,.5)"},{transform:`translateX(130vw) rotate(${rot}deg)`,offset:out/tot},{transform:`translateX(130vw) rotate(${rot}deg)`,offset:(out+gone)/tot*.999},
       {transform:`translateX(-130vw) rotate(${-rot}deg)`,offset:(out+gone)/tot,easing:"cubic-bezier(.15,.6,.25,1)"},{transform:"translateX(0) rotate(0)"}],{duration:tot,delay,fill:"backwards"})});
+  [...document.querySelectorAll(".hero h1,.hero .hint,.tab,.cd,.dh,.note,.nextup,.ev,.fab,.ipill,.show,.ride,.card,.fm,.kid,.todo,.place,.chip")].filter(vis).forEach(el=>{
+    const a=1.5+Math.random()*3,delay=900+Math.random()*900,dur=2600+Math.random()*2200;longest=Math.max(longest,delay+dur);
+    el.animate([{transform:"rotate(0) translateX(0)"},{transform:`rotate(${a}deg) translateX(${4+a*2}px)`,offset:.25},{transform:`rotate(${-a*.4}deg) translateX(0)`,offset:.5},{transform:`rotate(${a*.6}deg) translateX(${a}px)`,offset:.72},{transform:"rotate(0) translateX(0)"}],{duration:dur,delay,easing:"ease-in-out"})});
   setTimeout(()=>blowing=false,longest+100)}
 // planes zooming across when tapping the countdown
 function gusts(){const H=innerHeight;for(let i=0;i<60;i++)parts.push({k:"gust",x:-200,y:rnd(0,H),vx:rnd(14,28),vy:0,g:0,l:160,L:160,w:rnd(60,200),dl:rnd(0,90)|0,c:["#8fd3ff","#ffffff","#b9a3ff"][i%3]});if(!raf) tick()}
@@ -968,7 +994,7 @@ $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)r
 main.addEventListener("click",e=>{
   const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);blowAway()}}
   const k=e.target.closest("[data-k]"); if(k){buzz();kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
-  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);funny();face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
+  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,lbl);face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
   const shw=e.target.closest(".show[data-fx]"); if(shw&&!calm){showFx(shw.dataset.fx);shw.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:400})}
   const rd=e.target.closest(".ride"); if(rd){buzz(12);yeehaw();rd.animate([{transform:"rotate(0)"},{transform:"rotate(-2deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0)"}],{duration:350})}
   const f=e.target.closest("[data-f]"); if(f){buzz();rideF=f.dataset.f;store.set("rideF",rideF);render()}
@@ -989,7 +1015,7 @@ $("#snow2").innerHTML=flakes(60);
   const size=()=>{W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};size();addEventListener("resize",size);
   const mk=top=>({x:Math.random()*W,y:top?Math.random()*H*.5:-6,r:1+Math.random()*2.6,vy:.35+Math.random()*.9,ph:Math.random()*6,sw:.3+Math.random()*.7,m:1});
   for(let i=0;i<70;i++)fl.push(mk(true));
-  addEventListener("pointerdown",e=>{if(calm||e.target.closest("#game,#splash,.magic"))return;for(let i=0;i<26;i++){const a=i/26*Math.PI*2+Math.random()*.2,v=1.2+Math.random()*2.4;rip.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:1.2+Math.random()*2.2,l:50+Math.random()*25})}},{passive:true});
+  addEventListener("pointerdown",e=>{if(calm||e.target.closest("#game,#splash,.magic,button,a,input,.tab,.day,.ipill,.fab,.chip,.ride,.show,.fm,.kid,.todo,.place,.cd,#scene,#map"))return;for(let i=0;i<26;i++){const a=i/26*Math.PI*2+Math.random()*.2,v=1.2+Math.random()*2.4;rip.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:1.2+Math.random()*2.2,l:50+Math.random()*25})}},{passive:true});
   const loop=()=>{g.clearRect(0,0,W,H);
     if(!calm&&!document.hidden){const lim=$("header").getBoundingClientRect().bottom;
       fl.forEach(f=>{f.ph+=.02;f.y+=f.vy;f.x+=Math.sin(f.ph)*f.sw;if(f.y>lim-2)f.m-=.08;
