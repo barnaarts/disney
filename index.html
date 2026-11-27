@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Disney Xmas'26</title>
+<title>Disney Xmas&#39;26</title>
 <meta name="application-name" content="Disney Xmas'26">
 <meta name="apple-mobile-web-app-title" content="Disney Xmas'26">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -149,6 +149,16 @@ h2.sec{font-size:22px;margin:24px 0 10px}
 .fm .av img,.kid .av img{-webkit-mask-image:radial-gradient(ellipse 60% 56% at 50% 42%,#000 48%,rgba(0,0,0,.25) 78%,transparent 100%);mask-image:radial-gradient(ellipse 60% 56% at 50% 42%,#000 48%,rgba(0,0,0,.25) 78%,transparent 100%)}
 .ph-nm{position:absolute;left:0;right:0;bottom:0;padding:22px 6px 8px;background:linear-gradient(transparent,rgba(10,10,40,.78));color:#fff;text-align:center;line-height:1.15}
 .ph-nm b{display:block;font-family:var(--fd);font-size:17px;text-shadow:0 1px 3px rgba(0,0,0,.6)}.age{position:absolute;top:7px;right:7px;z-index:1;background:rgba(10,10,40,.55);color:#fff;font:700 12px var(--fd);border-radius:999px;padding:2px 8px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.kid .ph{overflow:hidden}
+.av img[src$="mutaz.jpg"]{scale:1.3;translate:-6.5% -7.6%}
+.av img[src$="nonna.jpg"]{scale:1.3;translate:15.6% 0}
+.fm .av img[src$="mutaz.jpg"]{translate:-8.7% -7.6%}
+.fm .av img[src$="nonna.jpg"]{translate:20.8% 0}
+.zz{position:fixed;z-index:1005;font-family:var(--fd);font-weight:700;color:#2443c9;text-shadow:0 0 3px #fff,0 0 6px #fff;pointer-events:none;animation:zz 2.2s ease-out forwards}
+@keyframes zz{0%{opacity:0;transform:translate(0,0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-90px) scale(1.3)}}
+.tci,.tsi{position:relative;overflow:hidden}.tci img,.tsi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tci .bd{position:absolute;right:3px;bottom:2px;z-index:1;font-size:17px;font-style:normal;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.pimg{flex:0 0 52px;height:52px;border-radius:12px;object-fit:cover;background:var(--soft)}
 @media (max-width:380px){.fam .fm{flex-basis:calc((100% - 16px)/3)}}
 .show{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;background:linear-gradient(135deg,#2a2a8a,#5b2bb5);color:#fff;border-radius:20px;padding:14px 16px;margin-bottom:10px}
 .show .t{font-family:var(--fd);font-size:24px;font-weight:700;color:var(--gold);white-space:nowrap;grid-row:span 2}
@@ -447,6 +457,10 @@ const PLACES=[
  ["ioa","Islands of Adventure",28.4711,-81.4716,"#ff7a1a","5","Universal days · Hogwarts Castle show"],
  ["epic","Epic Universe",28.4422,-81.4490,"#10a99b","6","Universal Epic Universe day"],
  ["mco","Orlando Airport (MCO)",28.4312,-81.3081,"#3d5afe","✈","Arrive 18 · leave 23 Dec"]];
+// venue photos from Wikimedia Commons (free licences)
+const VIMG={mk:"Cinderella_Castle.jpg",epcot:"Spaceship_Earth_at_night.jpg",hs:"Disney's_Hollywood_Studios_Archway.jpg",ioa:"Universal-Islands-of-Adventure-Lighthouse-9068.jpg",uni:"Universal-Islands-of-Adventure-Lighthouse-9068.jpg",epic:"Chronos_Tower_Front_Epic_Universe.jpg",mco:"Delta_airplanes_at_Orlando_International_Airport.jpg",dca:"Reagan_Terminal_B-C.JPG"};
+const vimg=(k,w)=>VIMG[k]?"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(VIMG[k]).replace(/'/g,"%27")+"?width="+(w||240):"";
+const vtag=(k,cls,w,st)=>VIMG[k]?`<img class="${cls||""}" src="${vimg(k,w)}" alt="" loading="lazy"${st?` style="${st}"`:""} onerror="this.remove()">`:"";
 const DAYS=[
  {id:"17",dow:"Thu",title:"Sleepover at Jason's",kind:"Night before",lead:"Jason",col:"#3d5afe",ev:[
   ["20:00","Evening","Night at Jason's","Bags packed, alarms set: we leave at 5:45 AM.","rest"]]},
@@ -616,6 +630,38 @@ function funny(k){if(!ac())return;const s=SFX[PSOUND[k]!=null?PSOUND[k]:Math.ran
 function whistle(){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(900,t);o.frequency.exponentialRampToValueAtTime(2400,t+.5);
   g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+.55);o.connect(g).connect(a.destination);o.start(t);o.stop(t+.6)}
 
+function carSound(ms){const a=ac();if(!a)return;const t=a.currentTime,d=ms/1000+.3;
+  tone(392,.1,"square",.06,t);tone(392,.14,"square",.06,t+.16);
+  const o=a.createOscillator(),o2=a.createOscillator(),f=a.createBiquadFilter(),g=a.createGain(),am=a.createGain(),l=a.createOscillator(),lg=a.createGain();
+  o.type=o2.type="sawtooth";[[o,1],[o2,1.5]].forEach(([x,m])=>{x.frequency.setValueAtTime(48*m,t+.3);x.frequency.linearRampToValueAtTime(90*m,t+.3+d*.35);x.frequency.linearRampToValueAtTime(78*m,t+d*.75);x.frequency.linearRampToValueAtTime(45*m,t+d)});
+  f.type="lowpass";f.frequency.value=500;am.gain.value=.6;l.frequency.value=22;lg.gain.value=.4;l.connect(lg).connect(am.gain);
+  g.gain.setValueAtTime(.0001,t+.3);g.gain.exponentialRampToValueAtTime(.22,t+.6);g.gain.setValueAtTime(.22,t+d-.4);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(f);o2.connect(f);f.connect(am).connect(g).connect(a.destination);[o,o2,l].forEach(x=>{x.start(t+.3);x.stop(t+d+.05)})}
+function snore(){const a=ac();if(!a)return;const t0=a.currentTime;
+  for(let c=0;c<2;c++){const t=t0+.2+c*1.9;
+    const s=a.createBufferSource(),f=a.createBiquadFilter(),am=a.createGain(),l=a.createOscillator(),lg=a.createGain(),g=a.createGain();
+    s.buffer=noise();s.loop=true;f.type="lowpass";f.frequency.value=450;am.gain.value=.5;l.frequency.value=26;lg.gain.value=.5;l.connect(lg).connect(am.gain);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.7,t+.65);g.gain.exponentialRampToValueAtTime(.0001,t+1.1);
+    s.connect(f).connect(am).connect(g).connect(a.destination);s.start(t);s.stop(t+1.15);l.start(t);l.stop(t+1.15);
+    const o=a.createOscillator(),of=a.createBiquadFilter(),og=a.createGain();o.type="sawtooth";o.frequency.setValueAtTime(70,t);o.frequency.linearRampToValueAtTime(95,t+1);of.type="lowpass";of.frequency.value=300;
+    og.gain.setValueAtTime(.0001,t);og.gain.exponentialRampToValueAtTime(.12,t+.6);og.gain.exponentialRampToValueAtTime(.0001,t+1.1);o.connect(of).connect(og).connect(a.destination);o.start(t);o.stop(t+1.15);
+    const w=a.createOscillator(),wg=a.createGain();w.type="sine";w.frequency.setValueAtTime(900,t+1.2);w.frequency.exponentialRampToValueAtTime(520,t+1.8);
+    wg.gain.setValueAtTime(.0001,t+1.2);wg.gain.exponentialRampToValueAtTime(.05,t+1.3);wg.gain.exponentialRampToValueAtTime(.0001,t+1.85);w.connect(wg).connect(a.destination);w.start(t+1.2);w.stop(t+1.9)}}
+function zzz(el){if(!el)return;const r=el.getBoundingClientRect();["z","z","Z","💤","Z","💤"].forEach((s,i)=>setTimeout(()=>{const z=document.createElement("div");z.className="zz";z.textContent=s;
+  z.style.left=(r.left+r.width*.6)+"px";z.style.top=r.top+"px";z.style.fontSize=(16+i*4)+"px";z.style.setProperty("--dx",(14+Math.random()*26)+"px");document.body.appendChild(z);setTimeout(()=>z.remove(),2300)},i*420))}
+// face moves: Info cards move to match their sound; Rides faces get a different move each tap
+const MOVES={
+ waddle:{k:[{transform:"rotate(0)"},{transform:"rotate(-10deg)"},{transform:"rotate(10deg)"},{transform:"rotate(-8deg)"},{transform:"rotate(6deg)"},{transform:"rotate(0)"}],d:600,o:"50% 100%"},
+ hop:{k:[0,-14,0,-9,0,-5,0].map(y=>({transform:`translateY(${y}%)`})),d:650},
+ boing:{k:[{transform:"scale(1,1)"},{transform:"scale(1.15,.8)"},{transform:"translateY(-22%) scale(.9,1.15)"},{transform:"scale(1.1,.88)"},{transform:"translateY(-8%) scale(.97,1.05)"},{transform:"scale(1,1)"}],d:700,o:"50% 100%"},
+ shake:{k:[0,-8,8,-7,7,-4,4,0].map(x=>({transform:`translateX(${x}%)`})),d:500},
+ swing:{k:[{transform:"rotate(0)"},{transform:"rotate(14deg)"},{transform:"rotate(-12deg)"},{transform:"rotate(8deg)"},{transform:"rotate(-5deg)"},{transform:"rotate(0)"}],d:900,o:"50% 0%"},
+ stretch:{k:[{transform:"scale(1,1)"},{transform:"scale(.92,1.14)"},{transform:"scale(.95,1.1)"},{transform:"scale(1.04,.96)"},{transform:"scale(1,1)"}],d:900,o:"50% 100%"},
+ recoil:{k:[{transform:"translateY(0) rotate(0) scale(1)"},{transform:"translateY(6%) rotate(-6deg) scale(.94)"},{transform:"translateY(-10%) rotate(4deg) scale(1.08)"},{transform:"translateY(0) rotate(0) scale(1)"}],d:500},
+ spin:{k:[{transform:"rotate(0)"},{transform:"rotate(360deg)"}],d:700}};
+const SOUNDMOVE={"🦆":"waddle","🐷":"waddle","🐑":"waddle","🐦":"hop","🐸":"hop","🧸":"hop","🌀":"boing","📯":"shake","🤡":"shake","🐶":"shake","🚨":"spin","🔔":"swing","🕰️":"swing","🦉":"swing","🐱":"stretch","🐄":"stretch","🐘":"stretch","🐓":"stretch","🔫":"recoil","🤧":"recoil","💨":"recoil","💋":"recoil"};
+let lastMove="";
+function playMove(el,mv){const m=MOVES[mv];if(el&&m)el.animate(m.k.map(f=>m.o?{...f,transformOrigin:m.o}:f),{duration:m.d,easing:"ease-in-out"})}
 function et(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{date:g("year")+"-"+g("month")+"-"+g("day"),min:+g("hour")*60+ +g("minute")}}
 const toMin=t=>{const[h,m]=t.split(":");return h*60+ +m};
 const todayId=()=>{const n=et();return n.date.startsWith("2026-12-")&&DAYS.some(d=>d.id===n.date.slice(8))?n.date.slice(8):null};
@@ -646,7 +692,7 @@ function oneDay(d,anim){
   const n=et(), isToday=todayId()===d.id;
   let nowI=-1; if(isToday) d.ev.forEach((e,i)=>{if(toMin(e[0])<=n.min) nowI=i});
   const lk=BYNAME[d.lead];
-  let h=`<div class="dh${anim?" rise":""}" id="day-${d.id}" style="--dc:${d.col}"><small>${d.dow} ${d.id} Dec · ${d.kind}</small><h2>${d.title}</h2><div class="meta">${d.lead?`<span class="pill">${av(lk)}Lead: ${d.lead}</span>`:""}${ROUTES[d.id]?`<button class="playbtn" data-play="${d.id}">▶ Play day</button>`:""}<span class="pill np">Orlando time</span></div></div>`;
+  let h=`<div class="dh${anim?" rise":""}" id="day-${d.id}" style="--dc:${d.col}"><small>${d.dow} ${d.id} Dec · ${d.kind}</small><h2>${d.title}</h2><div class="meta">${ROUTES[d.id]?`<button class="playbtn" data-play="${d.id}">▶ Play day</button>`:""}<span class="pill np">Orlando time</span></div></div>`;
   if(d.note) h+=`<div class="note">${d.note}</div>`;
   if(isToday&&d.ev[nowI+1]){const nx=d.ev[nowI+1];h+=`<div class="nextup"><div><small>Next up</small><b>${nx[2]}</b></div><b class="f">${nx[1]}</b></div>`}
   if(d.tbd) h+=`<div class="empty"><h3>Jason is planning this one</h3><div class="sub">Universal Park-to-Park + Epic Universe tickets are booked. Rides and dinner coming soon.</div><div class="rl" style="max-width:340px;margin:12px auto 0">${rideLinks("usf").slice(16,-6)}</div><div class="sub" style="margin-top:6px">↑ to Universal · ↓ back to the hotel</div><div class="rl" style="max-width:340px;margin:6px auto 0">${rideLinks("hotel").slice(16,-6)}</div></div>`;
@@ -683,8 +729,8 @@ function todoView(){
 const gmap=p=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p[1]+", Orlando FL")}`;
 function mapView(){
   return `<button class="playtrip" data-play="trip">▶ Play the whole trip</button><div id="map"><div class="mapmsg">Loading the map…</div></div>`+
-   PLACES.map((p,i)=>`<div class="place" data-p="${i}" style="--c:${p[4]}"><span class="dot">${p[5]}</span><div class="n"><b>${p[1]}</b><small>${p[6]}</small></div><a href="${gmap(p)}" target="_blank" rel="noopener">Directions</a></div>`).join("")+
-   `<p class="foot">Pins are approximate. "Directions" opens Google Maps.</p>`;
+   PLACES.map((p,i)=>`<div class="place" data-p="${i}" style="--c:${p[4]}"><span class="dot">${p[5]}</span>${vtag(p[0],"pimg",160)}<div class="n"><b>${p[1]}</b><small>${p[6]}</small></div><a href="${gmap(p)}" target="_blank" rel="noopener">Directions</a></div>`).join("")+
+   `<p class="foot">Pins are approximate. "Directions" opens Google Maps. Photos: Wikimedia Commons (CC BY / BY-SA).</p>`;
 }
 let LM=null,mk=[];
 function loadLeaflet(cb){if(window.L)return cb();
@@ -694,7 +740,7 @@ function loadLeaflet(cb){if(window.L)return cb();
 function drawMap(){loadLeaflet(()=>{const el=$("#map");if(!el||!window.L)return;el.innerHTML="";
   LM=L.map(el,{zoomControl:true,attributionControl:true});
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(LM);
-  mk=PLACES.map(p=>L.marker([p[2],p[3]],{icon:L.divIcon({className:"",html:`<div class="mk" style="--c:${p[4]}"><span>${p[5]}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]})}).addTo(LM).bindPopup(`<b>${p[1]}</b><br>${p[6]}`));
+  mk=PLACES.map(p=>L.marker([p[2],p[3]],{icon:L.divIcon({className:"",html:`<div class="mk" style="--c:${p[4]}"><span>${p[5]}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]})}).addTo(LM).bindPopup(`${vtag(p[0],"",360,"width:180px;height:110px;object-fit:cover;border-radius:10px;display:block;margin-bottom:6px")}<b>${p[1]}</b><br>${p[6]}`));
   LM.fitBounds(L.latLngBounds(PLACES.map(p=>[p[2],p[3]])),{padding:[24,24]})})}
 function infoView(){
   const r=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`;
@@ -883,12 +929,12 @@ function drawTour(id){TL.clearLayers();const seq=tripSeq(id);
     L.marker(ll(k),{icon:L.divIcon({className:"",iconSize:[38,38],iconAnchor:[19,19],html:`<div class="tpin">${sp[3]}</div>`})}).bindPopup(`<b>${sp[0]}</b>`).addTo(TL)})}
 function renderTourSteps(id){const seq=tripSeq(id);let h=`<h3>${id==="trip"?"The whole trip":"Step by step"}</h3>`;
   seq.forEach((p,i)=>{const sp=SPOTS[p.s[0]],dd=DAYS.find(x=>x.id===p.day);
-    h+=`<div class="tstep" data-st="${i}"><span class="tsi">${sp[3]}</span><div><small>${id==="trip"?dd.dow+" "+dd.id+" · ":""}${p.s[1]}</small><b>${sp[0]}</b><div class="sub">${p.s[2]}</div></div></div>`;
+    h+=`<div class="tstep" data-st="${i}"><span class="tsi">${sp[3]}${vtag(p.s[0],"",120)}</span><div><small>${id==="trip"?dd.dow+" "+dd.id+" · ":""}${p.s[1]}</small><b>${sp[0]}</b><div class="sub">${p.s[2]}</div></div></div>`;
     if(i<seq.length-1){const g=legOf(p.s,seq[i+1].s);h+=`<div class="tleg" data-lg="${i}">${g.txt}${g.url?` <a href="${g.url}" target="_blank" rel="noopener">Directions ↗</a>`:""}</div>`}});
-  $("#tsheet").innerHTML=h+`<p class="foot">Distances and drive times are estimates.</p>`}
+  $("#tsheet").innerHTML=h+`<p class="foot">Distances and drive times are estimates. Photos: Wikimedia Commons (CC BY / BY-SA).</p>`}
 function tourCard(p,leg,dur){const c=$("#tcard"),sp=SPOTS[p.s[0]],dd=DAYS.find(x=>x.id===p.day);
   const n=document.createElement("div");n.className="tcs in";
-  n.innerHTML=`<span class="tci" style="--dc:${dd.col}">${sp[3]}</span><div class="tct"><small>${dd.dow} ${dd.id} · ${p.s[1]}</small><b>${sp[0]}</b><span>${p.s[2]}</span>${leg?`<em>Next: ${leg.txt}</em>`:""}</div>`;
+  n.innerHTML=`<span class="tci" style="--dc:${dd.col}">${sp[3]}${vtag(p.s[0],"",200)}${VIMG[p.s[0]]?`<i class="bd">${sp[3]}</i>`:""}</span><div class="tct"><small>${dd.dow} ${dd.id} · ${p.s[1]}</small><b>${sp[0]}</b><span>${p.s[2]}</span>${leg?`<em>Next: ${leg.txt}</em>`:""}</div>`;
   const old=[...c.querySelectorAll(".tcs:not(.out)")];c.appendChild(n);n.offsetWidth;const tr=`transform ${dur||450}ms cubic-bezier(.45,0,.55,1),opacity ${dur||450}ms`;
   n.style.transition=tr;n.classList.remove("in");old.forEach(o=>{o.style.transition=tr;o.classList.add("out");setTimeout(()=>o.remove(),(dur||450)+80)})}
 function tourMarkStep(sel){document.querySelectorAll(".tstep.cur,.tleg.cur").forEach(e=>e.classList.remove("cur"));const el=document.querySelector(sel);if(el)el.classList.add("cur")}
@@ -906,10 +952,12 @@ function playTour(){const run=++tourRunId,id=tourId,seq=tripSeq(id),alive=()=>ru
       else{if(!orl.contains(TM.getBounds())&&!TM.getBounds().contains(orl)||TM.getZoom()<9){TM.flyToBounds(orl,{...pad,duration:1.2,maxZoom:13});await wait(1300)}
         el.textContent="🚗";el.style.transform=pb.x>pa.x?"scaleX(-1)":"none"}
       if(!alive())return;tourMarkStep(`.tleg[data-lg="${i}"]`);
-      const dur=g.fly?4200:Math.min(3200,Math.max(1600,g.km*90));tourCard(seq[i+1],seq[i+2]?legOf(seq[i+1].s,seq[i+2].s):null,Math.min(dur,900));
+      const dur=g.fly?4200:Math.min(3200,Math.max(1600,g.km*90));if(g.fly)jet();else carSound(dur);tourCard(seq[i+1],seq[i+2]?legOf(seq[i+1].s,seq[i+2].s):null,Math.min(dur,900));
       await new Promise(res=>{const t0=performance.now(),step=t=>{if(!alive())return res();const k=Math.min(1,(t-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
         car.setLatLng([A[0]+(B[0]-A[0])*e,A[1]+(B[1]-A[1])*e]);k<1?requestAnimationFrame(step):res()};requestAnimationFrame(step)});
-      if(!alive())return;buzz(8);tourMarkStep(`.tstep[data-st="${i+1}"]`);await wait(1200)}
+      if(!alive())return;buzz(8);tourMarkStep(`.tstep[data-st="${i+1}"]`);
+      const home=seq[i+1].s[0]==="hotel"&&seq[i].s[0]!=="mco";if(home){el.textContent="😴";el.style.transform="none";snore();zzz(el)}
+      await wait(home?3400:1200)}
     if(alive()){chime()}})()}
 
 // search
@@ -1211,7 +1259,7 @@ $("#g-next").onclick=()=>{buzz();gnext()};
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;buzz();if(b.dataset.v==="rides")yeehaw();view=b.dataset.v;store.set("view",view);render();keepTop()});
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;buzz();day=b.dataset.d;store.set("day",day);render();keepTop()});
 $("#tclose").addEventListener("click",()=>{buzz();closeTour()});
-$("#treplay").addEventListener("click",()=>{buzz();$("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on");drawTour(tourId);playTour()});
+$("#treplay").addEventListener("click",()=>{buzz();ac();$("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on");drawTour(tourId);playTour()});
 $("#tsteps").addEventListener("click",()=>{buzz();const o=$("#tsheet").classList.toggle("open");$("#tsteps").classList.toggle("on",o)});
 // swipe left/right on the day plan to change day
 {let sx=null,sy=0,st=0;const ids=DAYS.map(d=>d.id);
@@ -1225,10 +1273,11 @@ $("#tsteps").addEventListener("click",()=>{buzz();const o=$("#tsheet").classList
       const p=document.querySelector(`.day[data-d="${nd}"]`);if(p)p.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
       setTimeout(()=>main.classList.remove("swipe-go"),300)},180)},{passive:true})}
 main.addEventListener("click",e=>{
-  const pb=e.target.closest("[data-play]"); if(pb){buzz();openTour(pb.dataset.play);return}
+  const pb=e.target.closest("[data-play]"); if(pb){buzz();ac();openTour(pb.dataset.play);return}
   const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);setTimeout(faceFly,250);blowAway()}}
   const k=e.target.closest("[data-k]"); if(k){buzz();kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
-  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,[...lbl.split(" ")[0]].join(""));face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
+  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,[...lbl.split(" ")[0]].join(""));if(face.matches(".kid .ph")){const ks=Object.keys(MOVES).filter(k=>k!==lastMove);lastMove=ks[Math.random()*ks.length|0];playMove(face.querySelector(".av img")||face.querySelector(".av"),lastMove)}
+    else playMove(face,SOUNDMOVE[lbl?lbl.split(" ")[0]:""]||"waddle")}
   const shw=e.target.closest(".show[data-fx]"); if(shw&&!calm){showFx(shw.dataset.fx);shw.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:400})}
   const rd=e.target.closest(".ride"); if(rd){buzz(12);yeehaw();rd.animate([{transform:"rotate(0)"},{transform:"rotate(-2deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0)"}],{duration:350})}
   const f=e.target.closest("[data-f]"); if(f){buzz();rideF=f.dataset.f;store.set("rideF",rideF);render()}
