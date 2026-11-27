@@ -60,6 +60,10 @@ header{position:sticky;top:var(--sat);z-index:5;background:var(--deep);color:#ff
 .tabs{display:flex;justify-content:center;gap:5px;padding:10px 8px 0;max-width:680px;margin:0 auto}
 .tab{border:2px solid rgba(255,255,255,.55);background:none;color:#fff;font-weight:800;font-size:13.5px;padding:7px 10px;border-radius:999px;cursor:pointer;min-height:40px;white-space:nowrap}
 .tab.on{background:var(--gold);border-color:var(--gold);color:#1d1a3a}
+.ipills{display:flex;gap:6px;overflow-x:auto;padding:12px 12px 0;max-width:680px;margin:0 auto;scrollbar-width:none}
+.ipills::-webkit-scrollbar{display:none}
+.ipill{flex:none;border:0;background:rgba(255,255,255,.16);color:#fff;font-weight:800;font-size:13.5px;border-radius:999px;padding:8px 13px;cursor:pointer;box-shadow:inset 0 -4px 0 var(--pc);min-height:38px}
+.ipill:active{transform:scale(.92)}
 .days{display:flex;justify-content:center;gap:5px;padding:12px 10px 0;max-width:620px;margin:0 auto}
 .day{flex:1 1 0;max-width:62px;position:relative;border:2px solid transparent;background:rgba(255,255,255,.16);color:#fff;border-radius:14px;padding:6px 0 10px;cursor:pointer;text-align:center;overflow:hidden;
   box-shadow:inset 0 -5px 0 var(--dc)}
@@ -105,7 +109,15 @@ main{max-width:680px;margin:0 auto;padding:16px 14px 120px}
 .allsep{height:8px}
 .cd{background:var(--card);border-radius:22px;padding:16px;text-align:center;margin:0 0 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 18px rgba(40,30,120,.08)}
 .cd .l{font-weight:800;margin-bottom:10px}
-.cdg{display:flex;justify-content:center;gap:10px}
+.cd{position:relative;overflow:hidden;isolation:isolate}
+.wind{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.wind i{position:absolute;left:-40%;height:2px;width:var(--w);border-radius:2px;background:linear-gradient(90deg,transparent,var(--wc),transparent);opacity:.7;animation:gust var(--s) linear infinite;animation-delay:var(--dl)}
+@keyframes gust{0%{transform:translateX(0) translateY(0)}50%{transform:translateX(90vw) translateY(-6px)}100%{transform:translateX(180vw) translateY(4px)}}
+.wind .pl{position:absolute;font-size:22px;top:14px;left:-30px;animation:fly 9s linear infinite;opacity:.85}
+@keyframes fly{0%{transform:translate(0,14px) rotate(4deg)}50%{transform:translate(55vw,0) rotate(-3deg)}100%{transform:translate(115vw,10px) rotate(4deg)}}
+.cdg{display:flex;justify-content:center;align-items:flex-start;gap:10px}
+.colon{font-family:var(--fd);font-weight:700;font-size:clamp(30px,9vw,42px);line-height:1;padding-top:10px;margin:0 -4px;color:var(--sky2);animation:blink 1s steps(1,end) infinite}
+@keyframes blink{50%{opacity:0}}
 .cdu b{display:block;font-family:var(--fd);font-size:clamp(30px,9vw,42px);line-height:1;color:#fff;border-radius:14px;padding:10px 0;width:clamp(58px,17vw,76px);background:var(--u)}
 .cdu small{font-size:12px;font-weight:800;color:var(--muted)}
 .cd .h{font-size:13px;color:var(--muted);margin-top:8px}
@@ -118,10 +130,16 @@ h2.sec{font-size:22px;margin:24px 0 10px}
 .row span:first-child{color:var(--muted);font-weight:700;flex:0 0 auto;max-width:45%}
 .row span:last-child{text-align:right}
 .card a{color:var(--c-travel);font-weight:700}
+.applinks a{display:block;text-decoration:none;color:inherit;padding:8px 0;border-top:1px solid var(--line)}.applinks a:first-child{border-top:0}
+.applinks b{display:block;font-size:16px}.applinks small{display:block;color:var(--muted);font-size:13.5px;font-weight:600}.applinks span{color:var(--c-travel);font-weight:800;font-size:14px}
+.rl{display:flex;gap:8px;margin-top:8px}.rl a{flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:14px;border-radius:999px;padding:9px 10px;color:#fff}
+.rl .ub{background:#111}.rl .ly{background:#ff00bf}
+.sos{display:block;text-align:center;background:#e8336f;color:#fff;font-weight:800;font-size:17px;text-decoration:none;border-radius:18px;padding:14px;margin:4px 0 10px}
 .code{font-family:var(--fd);font-weight:600;letter-spacing:.05em;background:var(--soft);border-radius:8px;padding:1px 8px;white-space:nowrap}
 .fam{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .fm{position:relative;aspect-ratio:3/4;border-radius:18px;overflow:hidden;box-shadow:0 2px 0 var(--line),0 0 0 3px var(--a) inset;background:var(--a)}
 .fm .av{position:absolute;inset:0;width:100%;height:100%;border-radius:0;font-size:46px;display:grid}
+.fm .av img,.kid .av img{-webkit-mask-image:radial-gradient(ellipse 60% 56% at 50% 42%,#000 48%,rgba(0,0,0,.25) 78%,transparent 100%);mask-image:radial-gradient(ellipse 60% 56% at 50% 42%,#000 48%,rgba(0,0,0,.25) 78%,transparent 100%)}
 .ph-nm{position:absolute;left:0;right:0;bottom:0;padding:22px 6px 8px;background:linear-gradient(transparent,rgba(10,10,40,.78));color:#fff;text-align:center;line-height:1.15}
 .ph-nm b{display:block;font-family:var(--fd);font-size:17px;text-shadow:0 1px 3px rgba(0,0,0,.6)}.age{position:absolute;top:7px;right:7px;z-index:1;background:rgba(10,10,40,.55);color:#fff;font:700 12px var(--fd);border-radius:999px;padding:2px 8px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 @media (max-width:380px){.fam{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -130,6 +148,8 @@ h2.sec{font-size:22px;margin:24px 0 10px}
 .show b{font-size:17px}.show span{font-size:14.5px;opacity:.9}
 .show{position:relative;overflow:hidden}.show .em{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:54px;opacity:.9;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
 .show b,.show span{padding-right:58px}
+.dsep{height:1px;background:color-mix(in srgb,var(--muted) 35%,transparent);margin:16px 6px}
+.show{cursor:pointer}
 .show .d{grid-column:1/-1;font-size:12px;font-weight:800;text-transform:uppercase;opacity:.75}
 .kids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .kid{background:var(--card);border-radius:18px;overflow:hidden;text-align:center;border:2px solid color-mix(in srgb,var(--a) 35%,transparent);box-shadow:0 2px 0 var(--line);padding-bottom:10px}
@@ -283,6 +303,7 @@ body.g-open{overflow:hidden}
     <button class="tab" data-v="info">Info</button>
   </div>
   <nav class="days" id="days"></nav>
+  <nav class="ipills" id="ipills"></nav>
 </header>
 <main id="main"></main>
 
@@ -312,6 +333,15 @@ const ART={"Peter Pan's Flight":"⛵","Dumbo":"🐘","The Barnstormer":"✈️",
  "Happily Ever After":"🎆","Disney Starlight night parade":"✨","Universal Holiday Parade featuring Macy's":"🎈","The Magic of Christmas at Hogwarts Castle":"🪄","Fantasmic!":"🐉","Luminous: The Symphony of Us":"🎇"};
 const GRAD=[["#ff9ac8","#ff4f9a"],["#ffd877","#ff7a1a"],["#8fd3ff","#3a5cf0"],["#a7f3d0","#10a99b"],["#d4b8ff","#8b3ffc"],["#ffe08a","#e0a400"]];
 const artTile=(n,i)=>{const g=GRAD[i%GRAD.length];return `<div class="art" style="--a1:${g[0]};--a2:${g[1]}">${ART[n]||"🎢"}</div>`};
+const DEST={hotel:["the Waldorf","Waldorf Astoria Orlando","14200 Bonnet Creek Resort Lane, Orlando, FL 32821",28.3586,-81.5128],
+ usf:["Universal","Universal Orlando Resort","6000 Universal Blvd, Orlando, FL 32819",28.4743,-81.4678],
+ epic:["Epic Universe","Universal Epic Universe","Orlando, FL",28.4422,-81.4490],
+ mco:["the airport","Orlando International Airport (MCO)","1 Jeff Fuqua Blvd, Orlando, FL 32827",28.4312,-81.3081],
+ mk:["Magic Kingdom","Magic Kingdom","Bay Lake, FL",28.4177,-81.5812]};
+const rideLinks=k=>{const x=DEST[k],e=encodeURIComponent;
+  return `<div class="rl"><a class="ub" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${x[3]}&dropoff[longitude]=${x[4]}&dropoff[nickname]=${e(x[1])}&dropoff[formatted_address]=${e(x[2])}" target="_blank" rel="noopener">Uber</a><a class="ly" href="https://lyft.com/ride?id=lyft&destination[latitude]=${x[3]}&destination[longitude]=${x[4]}" target="_blank" rel="noopener">Lyft</a></div>`};
+const RIDEEV={"18-2":"hotel","19-0":"mk","21-18":"hotel","23-4":"mco"};
+const INFOSEC=[["who","Who","#ff4f9a"],["flights","Flights","#3d5afe"],["hotel","Hotel","#ff7a1a"],["tickets","Tickets","#ffc53d"],["apps","Apps","#10a99b"],["food","Food","#e8336f"],["around","Getting around","#1f9bea"],["contacts","Contacts","#8b3ffc"],["know","Good to know","#e0a400"]];
 const BYNAME={Katie:"K",Albert:"A",Nonna:"Ja",Jason:"Js",Mutaz:"M"};
 const ALL=["K","A","Ja","Js","M","L","B"];
 const COL={travel:"var(--c-travel)",food:"var(--c-food)",ride:"var(--c-ride)",show:"var(--c-show)",rest:"var(--c-rest)",move:"var(--c-move)",split:"var(--c-split)",fun:"var(--c-fun)"};
@@ -397,12 +427,12 @@ const DAYS=[
 ];
 
 const SHOWS=[
- ["19","8:00 PM","Happily Ever After","Magic Kingdom · Main Street facing the castle. In place by 7:20."],
- ["19","~7:00 PM","Disney Starlight night parade","Frontierland or Liberty Square end, then walk to Main Street. Time not posted yet."],
- ["20","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets, 30–60 min early."],
- ["20","Dusk","The Magic of Christmas at Hogwarts Castle","Hogsmeade, Islands of Adventure. Repeats until close."],
- ["21","6:30 PM","Fantasmic!","Hollywood Studios · reserved through our lunch package."],
- ["21","9:15 PM","Luminous: The Symphony of Us","Epcot · World Showcase lagoon rail."]];
+ ["19","~7:00 PM","Disney Starlight night parade","Frontierland or Liberty Square end, then walk to Main Street. Time not posted yet.","stars"],
+ ["19","8:00 PM","Happily Ever After","Magic Kingdom · Main Street facing the castle. In place by 7:20.","fireworks"],
+ ["20","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets, 30–60 min early.","balloons"],
+ ["20","Dusk","The Magic of Christmas at Hogwarts Castle","Hogsmeade, Islands of Adventure. Repeats until close.","magic"],
+ ["21","6:30 PM","Fantasmic!","Hollywood Studios · reserved through our lunch package.","fire"],
+ ["21","9:15 PM","Luminous: The Symphony of Us","Epcot · World Showcase lagoon rail.","fireworks"]];
 
 // [ride, park, min inches (0 = none), note]
 const RIDES=[
@@ -461,7 +491,7 @@ function et(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_Yor
 const toMin=t=>{const[h,m]=t.split(":");return h*60+ +m};
 const todayId=()=>{const n=et();return n.date.startsWith("2026-12-")&&DAYS.some(d=>d.id===n.date.slice(8))?n.date.slice(8):null};
 
-let view=store.get("view","days"), day=todayId()||store.get("day","18"), rideF=store.get("rideF","all");
+let view="days", day=todayId()||"all", rideF=store.get("rideF","all");
 const kids=store.get("kids",{L:44,B:38}), done=store.get("done",{});
 
 function av(k){const p=PEOPLE[k];return PH[k]?`<span class="av" style="--a:${p[1]}"><img src="${PH[k]}" alt="${p[0]}" loading="lazy"></span>`:`<span class="av" style="--a:${p[1]}" title="${p[0]}">${p[0][0]}</span>`}
@@ -478,7 +508,8 @@ function countdown(){
   const ms=Date.UTC(2026,11,18,12,59)-Date.now(); if(ms<=0) return "";
   const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);
   const u=(v,l,c)=>`<div class="cdu"><b style="--u:${c}">${v}</b><small>${l}</small></div>`;
-  return `<div class="cd" id="cd"><div class="l f">Take-off to Orlando in</div><div class="cdg">${u(d,"days","var(--pink)")}${u(h,"hours","var(--sky2)")}${u(m,"min","#10a99b")}</div><div class="h">Tap for fireworks</div></div>`;
+  const wc=["#8fd3ff","#ffd9ec","#b9a3ff","#a7f3d0","#ffe08a"],wind=Array.from({length:9},(_,i)=>`<i style="top:${8+i*10+Math.random()*4}%;--w:${30+Math.random()*40}%;--s:${3+Math.random()*4}s;--dl:-${Math.random()*6}s;--wc:${wc[i%5]}"></i>`).join("");
+  return `<div class="cd" id="cd"><div class="wind" aria-hidden="true">${wind}<span class="pl">✈️</span></div><div class="l f">Take-off to Orlando in</div><div class="cdg">${u(d,"days","var(--pink)")}${u(h,"hours","var(--sky2)")}<div class="colon" aria-hidden="true">:</div>${u(m,"min","#10a99b")}</div><div class="h">Tap for fireworks</div></div>`;
 }
 function oneDay(d,anim){
   const n=et(), isToday=todayId()===d.id;
@@ -487,9 +518,9 @@ function oneDay(d,anim){
   let h=`<div class="dh${anim?" rise":""}" id="day-${d.id}" style="--dc:${d.col}"><small>${d.dow} ${d.id} Dec · ${d.kind}</small><h2>${d.title}</h2><div class="meta">${d.lead?`<span class="pill">${av(lk)}Lead: ${d.lead}</span>`:""}<span class="pill np">Orlando time</span></div></div>`;
   if(d.note) h+=`<div class="note">${d.note}</div>`;
   if(isToday&&d.ev[nowI+1]){const nx=d.ev[nowI+1];h+=`<div class="nextup"><div><small>Next up</small><b>${nx[2]}</b></div><b class="f">${nx[1]}</b></div>`}
-  if(d.tbd) h+=`<div class="empty"><h3>Jason is planning this one</h3><div class="sub">Universal Park-to-Park + Epic Universe tickets are booked. Rides and dinner coming soon. Uber both ways.</div></div>`;
+  if(d.tbd) h+=`<div class="empty"><h3>Jason is planning this one</h3><div class="sub">Universal Park-to-Park + Epic Universe tickets are booked. Rides and dinner coming soon.</div><div class="rl" style="max-width:340px;margin:12px auto 0">${rideLinks("usf").slice(16,-6)}</div><div class="sub" style="margin-top:6px">↑ to Universal · ↓ back to the hotel</div><div class="rl" style="max-width:340px;margin:6px auto 0">${rideLinks("hotel").slice(16,-6)}</div></div>`;
   h+=d.ev.map((e,i)=>{const cls=isToday?(i===nowI?" now":i<nowI?" past":""):"";const tg=(e[5]||[]).map(tag).join("")+(i===nowI&&isToday?`<span class="tag live">Now</span>`:"");
-    return `<div class="ev${anim?" rise":""}${cls}" id="ev-${d.id}-${i}" style="--c:${COL[e[4]]};--d:${Math.min(i,10)*40}ms"><div class="time">${e[1].replace(/ (AM|PM)/,"<small>$1</small>")}</div><div><div class="title">${e[2]}</div>${e[3]?`<div class="sub">${e[3]}</div>`:""}${tg?`<div class="tags">${tg}</div>`:""}</div></div>`}).join("");
+    return `<div class="ev${anim?" rise":""}${cls}" id="ev-${d.id}-${i}" style="--c:${COL[e[4]]};--d:${Math.min(i,10)*40}ms"><div class="time">${e[1].replace(/ (AM|PM)/,"<small>$1</small>")}</div><div><div class="title">${e[2]}</div>${e[3]?`<div class="sub">${e[3]}</div>`:""}${tg?`<div class="tags">${tg}</div>`:""}${RIDEEV[d.id+"-"+i]?rideLinks(RIDEEV[d.id+"-"+i]):""}</div></div>`}).join("");
   return h;
 }
 function dayView(){
@@ -499,11 +530,11 @@ function dayView(){
 }
 function showsView(){
   return `<div class="note"><b>Saturday 19 is our only Magic Kingdom fireworks night.</b> MK closes early on 20 and 22 Dec for the Christmas party, with no fireworks. Check the apps the week before.</div>`+
-   SHOWS.map((s,i)=>{const d=DAYS.find(x=>x.id===s[0]);return `<div class="show rise" style="--d:${i*50}ms"><div class="d">${d.dow} ${s[0]} Dec</div><div class="t">${s[1]}</div><b>${s[2]}</b><span>${s[3]}</span><div class="em">${ART[s[2]]||"✨"}</div></div>`}).join("");
+   SHOWS.map((s,i)=>{const d=DAYS.find(x=>x.id===s[0]);return (i&&SHOWS[i-1][0]!==s[0]?'<div class="dsep"></div>':'')+`<div class="show rise" data-fx="${s[4]}" style="--d:${i*50}ms"><div class="d">${d.dow} ${s[0]} Dec</div><div class="t">${s[1]}</div><b>${s[2]}</b><span>${s[3]}</span><div class="em">${ART[s[2]]||"✨"}</div></div>`}).join("");
 }
 function ridesView(){
   const k=id=>`<div class="kid" style="--a:${PEOPLE[id][1]}"><div class="ph">${av(id)}<div class="ph-nm"><b>${PEOPLE[id][0]}</b></div></div><div class="step"><button class="btn" data-k="${id}" data-s="-1" aria-label="Shorter">−</button><output>${kids[id]}"</output><button class="btn" data-k="${id}" data-s="1" aria-label="Taller">+</button></div></div>`;
-  const f=[["all","All rides"],["MK","Magic Kingdom"],["HS","Hollywood Studios"]];
+  const f=[["all","All"],["MK","Magic Kingdom"],["HS","Hollywood Studios"]];
   const list=RIDES.filter(r=>rideF==="all"||r[1]===rideF);
   return `<div class="note">Set each kid's height — measure both at the park entrance. Bowie is about 38–39", London 44–47".</div>
   <div class="kids">${k("L")}${k("B")}</div>
@@ -536,33 +567,41 @@ function drawMap(){loadLeaflet(()=>{const el=$("#map");if(!el||!window.L)return;
   LM.fitBounds(L.latLngBounds(PLACES.map(p=>[p[2],p[3]])),{padding:[24,24]})})}
 function infoView(){
   const r=(a,b)=>`<div class="row"><span>${a}</span><span>${b}</span></div>`;
-  return `<h2 class="sec" style="margin-top:4px">Who's coming</h2><div class="fam">${shuffle(ALL).map(k=>{const p=PEOPLE[k];return `<div class="fm" style="--a:${p[1]}">${av(k)}${p[2]?`<span class="age">${p[2]}</span>`:""}<div class="ph-nm"><b>${p[0]}</b></div></div>`}).join("")}</div>
-  <h2 class="sec">Flights</h2>
+  return `<h2 class="sec" id="s-who" style="margin-top:4px">Who's coming</h2><div class="fam">${shuffle(ALL).map(k=>{const p=PEOPLE[k];return `<div class="fm" style="--a:${p[1]}">${av(k)}${p[2]?`<span class="age">${p[2]}</span>`:""}<div class="ph-nm"><b>${p[0]}</b></div></div>`}).join("")}</div>
+  <h2 class="sec" id="s-flights">Flights</h2>
   <div class="card"><h3>Out · Fri 18 Dec</h3>${r("Flight","AA 1983")}${r("Route","DCA 7:59 AM → MCO 10:37 AM")}${r("Albert, London, Bowie",code("out1"))}${r("Nonna, Jason, Katie",code("out2"))}</div>
   <div class="card"><h3>Home · Wed 23 Dec</h3>${r("Flight","AA 1165")}${r("Route","MCO 5:14 PM → DCA 7:30 PM")}${r("Bookings","Same as outbound")}</div>
-  <h2 class="sec">Hotel</h2>
+  <h2 class="sec" id="s-hotel">Hotel</h2>
   <div class="card"><h3>Waldorf Astoria Orlando</h3>${r("Rooms","3 · 18–23 Dec")}${r("Address","14200 Bonnet Creek Resort Lane")}${r("Phone",'<a href="tel:+14075975500">407-597-5500</a>')}${r("Confirmation",code("hotel"))}${r("Perk","30-min Early Entry at all 4 Disney parks, every day")}</div>
-  <h2 class="sec">Tickets</h2>
+  <h2 class="sec" id="s-tickets">Tickets</h2>
   <div class="card"><h3>Disney · 3-Day Park Hopper</h3>${r("Who","4 adults (10+) + 2 kids")}${r("Valid","Any 3 days, 18–22 Dec")}${r("Our plan","Epcot 18 · Hollywood Studios + Epcot 21 · one day spare")}${r("Confirmation",code("d3"))}</div>
   <div class="card"><h3>Disney · 1-Day Magic Kingdom</h3>${r("Who","4 adults (10+) + 2 kids")}${r("Valid","Sat 19 Dec only")}${r("Confirmation",code("mk1"))}</div>
   <div class="card"><h3>Universal · 1-Day Park-to-Park + 1-Day Epic Universe</h3>${r("Who","4 adults (10+) + 2 kids (3–9)")}${r("Valid","19–22 Dec")}${r("Our plan","Sun 20 + Tue 22 — which day is Epic Universe is still to decide")}${r("Confirmation",code("u2"))}</div>
   <div class="card"><h3>Universal · 1-Day Park-to-Park</h3>${r("Who","1 adult (10+)")}${r("Valid","Sun 20 Dec only")}${r("Confirmation",code("u1"))}</div>
   <div class="card"><h3>Pick up</h3>Ticket Services Desk, open daily 8:00 AM–5:00 PM. Collect the physical ticket confirmations, complimentary restaurant coupons and the <b>Disney Early Entry cards</b>. Keep the original confirmation emails handy.</div>
   <div class="card"><h3>Universal tickets in the app</h3><ol><li>Download the Universal Orlando Resort app.</li><li>Sign in or create a Universal account.</li><li>Go to Profile → Wallet.</li><li>Choose to scan or add a ticket.</li><li>Scan the barcode/QR on the confirmation, or type the ticket number.</li><li>The ticket appears in your wallet.</li></ol></div>
-  <h2 class="sec">Restaurants</h2>
+  <h2 class="sec" id="s-apps">Apps to get</h2>
+  <div class="card applinks"><a href="https://apps.apple.com/us/app/my-disney-experience/id547436543" target="_blank" rel="noopener"><b>My Disney Experience</b><small>Disney tickets, Lightning Lanes, mobile food orders, wait times</small><span>Get on iPhone ›</span></a>
+  <a href="https://apps.apple.com/us/app/universal-orlando-resort/id878217080" target="_blank" rel="noopener"><b>Universal Orlando Resort</b><small>Universal tickets in the wallet, maps, show times, food orders</small><span>Get on iPhone ›</span></a></div>
+  <h2 class="sec" id="s-food">Restaurants</h2>
   <div class="card">${r("Cinderella's Royal Table","Sat 19 · 8:05 AM · cancellable")}${r("Hollywood & Vine + Fantasmic!","Mon 21 · 12:35 PM · 6 guests")}${r("Confirmation",code("hv"))}${r("Epcot dinner","Mon 21 · to book")}</div>
-  <h2 class="sec">Getting around</h2>
-  <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber both ways")}${r("Airport","Van or two cars for 7")}</div>
-  <h2 class="sec">Contacts</h2>
+  <h2 class="sec" id="s-around">Getting around</h2>
+  <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber or Lyft both ways")}${r("Airport","Van or two cars for 7")}</div>
+  ${["hotel","usf","epic","mco"].map(k=>`<div class="card"><h3>To ${DEST[k][0]}</h3>${rideLinks(k)}</div>`).join("")}
+  <p class="foot" style="margin-top:4px">Check the drop-off pin in the app before you confirm. For 7 people, order an XL or two cars.</p>
+  <h2 class="sec" id="s-contacts">Contacts</h2>
   <div class="card"><h3>Gabriela Zambrano</h3>${r("Who","Lead VIP Concierge, All Guest Services")}${r("Office",'<a href="tel:+14076480064">407-648-0064</a>')}${r("Phone",'<a href="tel:+18633354470">863-335-4470</a>')}${r("Email",'<a href="mailto:gzambrano@allguest.com">gzambrano@allguest.com</a>')}${r("Address","4303 Vineland Rd, Suite F5, Orlando")}</div>
-  <div class="card">${r("Waldorf front desk",'<a href="tel:+14075975500">407-597-5500</a>')}${r("Albert (WhatsApp)",'<a href="https://wa.me/34689130137">+34 689 130 137</a>')}${r("Emergency","911")}</div>
-  <h2 class="sec">Good to know</h2>
+  <div class="card">${r("Waldorf front desk",'<a href="tel:+14075975500">407-597-5500</a>')}</div>
+  <a class="sos" href="tel:911">Call 911 — emergency</a>
+  <h2 class="sec" id="s-know">Good to know</h2>
   <div class="card">Albert eats vegan — tell every restaurant. Bring ponchos for Tiana's, ear defenders for Fantasmic!, and a change of clothes for the kids.</div>
   <p class="foot">Updated ${UPDATED} · all times are Orlando time</p>`;
 }
 function render(){
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.v===view));
   $("#days").style.display=view==="days"?"":"none";
+  $("#ipills").style.display=view==="info"?"":"none";
+  if(view==="info") $("#ipills").innerHTML=INFOSEC.map((x,i)=>`<button class="ipill" data-sec="${x[0]}" style="--pc:${x[2]}">${x[1]}</button>`).join("");
   if(view==="days") renderDays();
   if(LM){try{LM.remove()}catch(e){}LM=null}
   main.innerHTML=({days:dayView,shows:showsView,rides:ridesView,map:mapView,todo:todoView,info:infoView})[view]();
@@ -571,13 +610,37 @@ function render(){
 
 // fireworks (countdown)
 const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
-function boom(x,y){const cols=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#ffffff","#5cf2b0"];
-  for(let b=0;b<5;b++){const bx=x+(Math.random()-.5)*innerWidth*.7,by=y-Math.random()*innerHeight*.35,c=cols[b%cols.length];
-   for(let i=0;i<46;i++){const a=i/46*Math.PI*2,s=2+Math.random()*3.5;parts.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:60+Math.random()*30,c,dl:b*12})}}
+const FXC=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#ffffff","#5cf2b0"],rnd=(a,b)=>a+Math.random()*(b-a);
+function boom(x,y){
+  for(let b=0;b<5;b++){const bx=x+(Math.random()-.5)*innerWidth*.7,by=y-Math.random()*innerHeight*.35,c=FXC[b%FXC.length];
+   for(let i=0;i<46;i++){const a=i/46*Math.PI*2,s=2+Math.random()*3.5;parts.push({k:"dot",x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.05,l:60+Math.random()*30,L:90,c,dl:b*12})}}
+  if(!raf) tick()}
+function star4(x,y,r){cx.beginPath();cx.moveTo(x,y-r);cx.lineTo(x+r*.28,y-r*.28);cx.lineTo(x+r,y);cx.lineTo(x+r*.28,y+r*.28);cx.lineTo(x,y+r);cx.lineTo(x-r*.28,y+r*.28);cx.lineTo(x-r,y);cx.lineTo(x-r*.28,y-r*.28);cx.closePath();cx.fill()}
+// effect when tapping a show card
+function showFx(type){const W=innerWidth,H=innerHeight;buzz(15);
+  if(type==="fireworks"){boom(W/2,H*.5);bang(.35);setTimeout(()=>{boom(W/2,H*.45);bang(.3)},500);return}
+  if(type==="balloons"){const bc=["#ff4f9a","#ffc53d","#3a5cf0","#10a99b","#ff7a1a","#8b3ffc","#e8336f"];
+    for(let i=0;i<22;i++)parts.push({k:"balloon",x:rnd(20,W-20),y:H+rnd(30,260),vx:0,vy:-rnd(1.6,3.2),g:0,l:520,L:520,c:bc[i%bc.length],r:rnd(16,26),ph:rnd(0,6),dl:i*4});
+    [523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.1,ac()?ac().currentTime+i*.1:0))}
+  if(type==="magic"){for(let i=0;i<170;i++){const a=rnd(0,Math.PI*2);parts.push({k:"spark",x:W/2,y:H*.5,a,rad:0,va:rnd(.04,.09)*(Math.random()<.5?-1:1),vr:rnd(1.2,4),g:0,l:rnd(70,130),L:130,c:["#ffc53d","#ffffff","#b78cff","#7ee8ff"][i%4],r:rnd(3,8),dl:rnd(0,40)|0})}sparkle(.14)}
+  if(type==="stars"){for(let i=0;i<90;i++)parts.push({k:"star",x:rnd(0,W),y:rnd(-H*.6,-10),vx:rnd(-.4,.4),vy:rnd(1.5,4),g:0,l:rnd(150,260),L:260,c:["#fff","#ffe9a8","#ffd9ec","#bfe9ff"][i%4],r:rnd(3,9),ph:rnd(0,6),dl:rnd(0,50)|0});chime();setTimeout(chime,350)}
+  if(type==="fire"){for(let i=0;i<380;i++)parts.push({k:"flame",x:rnd(0,W),y:H+rnd(0,20),vx:rnd(-.6,.6),vy:-rnd(3,7.5),g:-.02,l:rnd(40,85),L:85,r:rnd(10,26),dl:rnd(0,70)|0});
+    try{const a=ac(),t=a.currentTime,sN=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();sN.buffer=noise();sN.loop=true;f.type="bandpass";f.frequency.setValueAtTime(400,t);f.frequency.linearRampToValueAtTime(1200,t+1.2);
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.35,t+.3);g.gain.exponentialRampToValueAtTime(.0001,t+2);sN.connect(f).connect(g).connect(a.destination);sN.start(t);sN.stop(t+2.1)}catch(e){}}
   if(!raf) tick()}
 function tick(){cv.width=innerWidth;cv.height=innerHeight;cx.clearRect(0,0,cv.width,cv.height);
-  parts=parts.filter(p=>p.l>0);parts.forEach(p=>{if(p.dl>0){p.dl--;return}p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.vx*=.985;p.l--;cx.globalAlpha=Math.min(1,p.l/40);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,2.4,0,7);cx.fill()});
-  raf=parts.length?requestAnimationFrame(tick):(cx.clearRect(0,0,cv.width,cv.height),0)}
+  parts=parts.filter(p=>p.l>0);
+  parts.forEach(p=>{if(p.dl>0){p.dl--;return}p.l--;const fa=Math.min(1,p.l/40);
+    if(p.k==="spark"){p.rad+=p.vr;p.a+=p.va;p.x=innerWidth/2+Math.cos(p.a)*p.rad;p.y=innerHeight*.5+Math.sin(p.a)*p.rad*.8;cx.globalAlpha=fa*(.5+.5*Math.random());cx.fillStyle=p.c;star4(p.x,p.y,p.r);return}
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;
+    if(p.k==="dot"){p.vx*=.985;cx.globalAlpha=fa;cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,2.4,0,7);cx.fill()}
+    else if(p.k==="balloon"){p.ph+=.04;p.x+=Math.sin(p.ph)*.8;if(p.y<-p.r*3)p.l=0;cx.globalAlpha=1;cx.strokeStyle="rgba(120,110,150,.7)";cx.lineWidth=1.2;cx.beginPath();cx.moveTo(p.x,p.y+p.r*1.15);cx.quadraticCurveTo(p.x+Math.sin(p.ph*2)*8,p.y+p.r*2,p.x,p.y+p.r*3);cx.stroke();
+      cx.fillStyle=p.c;cx.beginPath();cx.ellipse(p.x,p.y,p.r*.85,p.r*1.1,0,0,7);cx.fill();cx.beginPath();cx.moveTo(p.x-4,p.y+p.r*1.18);cx.lineTo(p.x+4,p.y+p.r*1.18);cx.lineTo(p.x,p.y+p.r*1.02);cx.fill();
+      cx.fillStyle="rgba(255,255,255,.45)";cx.beginPath();cx.ellipse(p.x-p.r*.3,p.y-p.r*.4,p.r*.18,p.r*.3,-.5,0,7);cx.fill()}
+    else if(p.k==="star"){p.ph+=.15;cx.globalAlpha=fa*(.55+.45*Math.sin(p.ph));cx.fillStyle=p.c;star4(p.x,p.y,p.r);if(p.y>innerHeight+20)p.l=0}
+    else if(p.k==="flame"){const t=p.l/p.L;cx.globalCompositeOperation="lighter";cx.globalAlpha=Math.min(1,t*1.4)*.55;
+      cx.fillStyle=t>.7?"#fff3b0":t>.45?"#ffb020":t>.2?"#ff5a1f":"#b81d1d";cx.beginPath();cx.arc(p.x,p.y,p.r*(.4+t*.6),0,7);cx.fill();cx.globalCompositeOperation="source-over"}});
+  cx.globalAlpha=1;raf=parts.length?requestAnimationFrame(tick):(cx.clearRect(0,0,cv.width,cv.height),0)}
 
 // castle magic: stars warp out from the castle faster and faster, fireworks bang, the page dims
 let magic=null;
@@ -850,6 +913,7 @@ $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)r
 main.addEventListener("click",e=>{
   const cd=e.target.closest("#cd"); if(cd){buzz();sparkle();if(!calm) boom(innerWidth/2,innerHeight*.55)}
   const k=e.target.closest("[data-k]"); if(k){buzz();kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
+  const shw=e.target.closest(".show[data-fx]"); if(shw&&!calm){showFx(shw.dataset.fx);shw.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:400})}
   const rd=e.target.closest(".ride"); if(rd){buzz(12);yeehaw();rd.animate([{transform:"rotate(0)"},{transform:"rotate(-2deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0)"}],{duration:350})}
   const f=e.target.closest("[data-f]"); if(f){buzz();rideF=f.dataset.f;store.set("rideF",rideF);render()}
   const p=e.target.closest(".place"); if(p&&!e.target.closest("a")&&LM){buzz();const x=PLACES[+p.dataset.p];LM.setView([x[2],x[3]],14);mk[+p.dataset.p].openPopup();$("#map").scrollIntoView({block:"center",behavior:"smooth"})}
@@ -857,6 +921,7 @@ main.addEventListener("click",e=>{
     if(done[id]&&TODO.every(x=>done[x[0]])&&!calm){sparkle();boom(innerWidth/2,innerHeight*.6)}}
 });
 main.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&e.target.dataset.t){e.preventDefault();e.target.click()}});
+$("#ipills").addEventListener("click",e=>{const b=e.target.closest(".ipill");if(!b)return;buzz();const el=document.getElementById("s-"+b.dataset.sec);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})});
 $("#totop").addEventListener("click",()=>{buzz();scrollTo({top:0,behavior:"smooth"})});
 addEventListener("scroll",()=>$("#fabs").classList.toggle("sc",scrollY>500),{passive:true});
 setInterval(()=>{if(view==="days"||view==="todo")render()},60000);
