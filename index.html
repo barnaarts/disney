@@ -960,7 +960,7 @@ const POP={title:"Firework pop",start(){
     graf=requestAnimationFrame(loop)};
   c.addEventListener("pointerdown",e=>{if(!run)return;const b=c.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;
     const i=it.findIndex(o=>Math.hypot(o.x-x,o.y-y)<Math.max(34,(o.type==="face"||o.type==="fun"?o.sz*.6:26*o.sc)));
-    if(i<0){SFX.find(z=>z[0].includes("Pfffrt"))[1]();buzz(25);bits.push({k:"ring",x,y,vx:0,vy:0,l:24,r:4});
+    if(i<0){SFX.find(z=>z[0].includes("Meow"))[1]();buzz(25);bits.push({k:"ring",x,y,vx:0,vy:0,l:24,r:4});
       for(let k=0;k<14;k++){const a=Math.random()*6.3,s=.5+Math.random()*1.6;bits.push({k:"dust",x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-.4,l:30+Math.random()*15,c:["#cbbfa8","#a99a86","#e6dccb"][k%3],r:1.5+Math.random()*2.5})}return}
     const o=it.splice(i,1)[0];score+=o.type==="face"?2:1;$("#psc").textContent=`⭐ ${score} · Best ${best("pop")}`;buzz(8);explode(o);
     if(o.sc>1.6){const n=3+(Math.random()*2|0);for(let k=0;k<n;k++){const m=mkItem(o.type,.6+Math.random()*.3,o.x,o.y,1.2+Math.random()*1.4);m.vx=(k-(n-1)/2)*2.2+(Math.random()-.5);if(o.type==="face")m.k=o.k;if(o.type==="fun")m.e=o.e;m.c=o.c;it.push(m)}}});
@@ -1035,7 +1035,7 @@ const BRICKS={title:"Castle breaker",start(){
   gbody.innerHTML=`<canvas id="brc"></canvas><div class="gpills"><div class="gpl"><span class="gp" id="bsc">⭐ 0</span><span class="gp" id="blv">❤️ 3</span><span class="gp" id="bl">Lv 1</span></div><button class="gp gpb" id="bsp">⚡ 1×</button></div>
    <div class="gcenter" id="bm">Tap to launch!</div><button class="g-btn gover" id="bg" hidden>Play again</button>`;
   const c=$("#brc"),g=c.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1);let W=300,H=500,pad,balls=[],bricks=[],gifts=[],shots=[],score=0,lives=3,level=1,run=false,stuck=true,bigUntil=0,shootUntil=0,nextShot=0;
-  const SPD=[1,1.5,2];let spi=Math.min(2,+(store.get("brSpeed",0))||0);
+  const SPD=[1,1.5,2,2.5,3];let spi=Math.min(4,+(store.get("brSpeed",0))||0);
   const cols=["#ff4f9a","#ff7a1a","#ffc53d","#10a99b","#1f9bea","#8b3ffc"],faces=ALL;
   const size=()=>{W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};
   const msg=t=>{$("#bm").textContent=t;$("#bm").style.display=t?"":"none"};
