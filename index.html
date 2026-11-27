@@ -393,7 +393,7 @@ const DEST={hotel:["the Waldorf","Waldorf Astoria Orlando","14200 Bonnet Creek R
  mk:["Magic Kingdom","Magic Kingdom","Bay Lake, FL",28.4177,-81.5812]};
 const rideLinks=k=>{const x=DEST[k],e=encodeURIComponent;
   return `<div class="rl"><a class="ub" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${x[3]}&dropoff[longitude]=${x[4]}&dropoff[nickname]=${e(x[1])}&dropoff[formatted_address]=${e(x[2])}" target="_blank" rel="noopener">Uber</a><a class="ly" href="https://lyft.com/ride?id=lyft&destination[latitude]=${x[3]}&destination[longitude]=${x[4]}" target="_blank" rel="noopener">Lyft</a></div>`};
-const RIDEEV={"18-2":"hotel","18-9":"hotel","19-0":"mk","21-18":"hotel","23-4":"mco"};
+const RIDEEV={"18-2":"hotel","18-9":"hotel","19-0":"mk","21-13":"hotel","23-4":"mco"};
 const INFOSEC=[["flights","✈️","Flights"],["hotel","🏨","Hotel"],["tickets","🎟️","Tickets"],["apps","📱","Apps"],["food","🍽️","Food"],["around","🚕","Getting around"],["contacts","☎️","Contacts"],["know","💡","Good to know"]];
 const BYNAME={Katie:"K",Albert:"A",Nonna:"Ja",Jason:"Js",Mutaz:"M"};
 const ALL=["K","A","Ja","Js","M","L","B"];
@@ -402,7 +402,7 @@ const COL={travel:"var(--c-travel)",food:"var(--c-food)",ride:"var(--c-ride)",sh
 const PLACES=[
  ["hotel","Waldorf Astoria Orlando",28.3586,-81.5128,"#ff4f9a","H","Our hotel · Bonnet Creek"],
  ["mk","Magic Kingdom",28.4177,-81.5812,"#ff4f9a","1","Sat 19 Dec"],
- ["epcot","Epcot",28.3747,-81.5494,"#1f9bea","2","Fri 18 + Mon 21 Dec"],
+ ["epcot","Epcot",28.3747,-81.5494,"#1f9bea","2","Fri 18 Dec · dinner + Luminous"],
  ["hs","Hollywood Studios",28.3575,-81.5583,"#8b3ffc","3","Mon 21 Dec"],
  ["usf","Universal Studios Florida",28.4752,-81.4665,"#ff7a1a","4","Universal days"],
  ["ioa","Islands of Adventure",28.4711,-81.4716,"#ff7a1a","5","Universal days · Hogwarts Castle show"],
@@ -448,8 +448,8 @@ const DAYS=[
  {id:"20",dow:"Sun",title:"Universal · day 1",kind:"Universal",lead:"Jason",col:"#ff7a1a",tbd:true,ev:[
   ["17:30","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets — get there 30–60 min early.","show"],
   ["17:45","Dusk","The Magic of Christmas at Hogwarts Castle","Repeats until park close · Hogsmeade, Islands of Adventure.","show"]]},
- {id:"21",dow:"Mon",title:"Hollywood Studios + Epcot",kind:"Double park day",lead:"Katie",col:"#8b3ffc",
-  note:"<b>Long day — about 14 hours for a 5-year-old.</b> Hollywood Studios closes to day guests at 7:00 PM (party night), so Fantasmic! runs once at 6:30. If Bowie is done after Fantasmic!, one adult takes him back while the rest go on to Epcot.",ev:[
+ {id:"21",dow:"Mon",title:"Hollywood Studios",kind:"Park day",lead:"Katie",col:"#8b3ffc",
+  note:"<b>Hollywood Studios all day.</b> The park closes to day guests at 7:00 PM (party night), so Fantasmic! runs once, at 6:30, and we head back to the hotel right after.",ev:[
   ["07:30","7:30 AM","Waldorf shuttle to Hollywood Studios","Reserve in advance; confirm first departure.","move"],
   ["08:30","~8:30 AM","Early Entry → Slinky Dog Dash","38\". Opening time not posted yet — check the app.","ride",["sb"]],
   ["09:15","9:15 AM","Alien Swirling Saucers","32\", next door in Toy Story Land.","ride",["sb"]],
@@ -463,12 +463,7 @@ const DAYS=[
   ["16:45","4:45 PM","Snack, rest, Multi Pass repeats","Refill water.","rest"],
   ["17:45","5:45 PM","Walk to Hollywood Hills Amphitheater","Follow the voucher's arrival time.","move"],
   ["18:30","6:30 PM","Fantasmic!","Fire, loud bangs, a dragon — ear defenders for Bowie.","show",["Reserved"]],
-  ["19:00","7:00 PM","Hop to Epcot International Gateway","FriendShip boat (~25 min, seated), Skyliner (change at Caribbean Beach) or walk the BoardWalk.","move"],
-  ["19:45","~7:45 PM","Enter Epcot between UK and France","Park hopping is included.","fun"],
-  ["20:00","8:00 PM","Dinner at Epcot","Spice Road Table (Morocco) first choice, Rose & Crown backup, else Holiday Kitchens booths. Finish by 8:45.","food",["To book"]],
-  ["20:45","8:45 PM","Claim a spot at the lagoon rail","Kids need the front rail. Japan/Morocco waterfront, or the accessible area by Rose & Crown.","move"],
-  ["21:15","9:15 PM","Luminous: The Symphony of Us","Exit after via International Gateway.","show",["Fireworks"]],
-  ["21:45","~9:45 PM","Back to the Waldorf","Confirm the Epcot pickup point with the concierge, or Uber from the BoardWalk.","move"]]},
+  ["19:00","7:00 PM","Back to the Waldorf","Waldorf shuttle from Hollywood Studios — reserve in advance. Easy dinner at the hotel.","move"]]},
  {id:"22",dow:"Tue",title:"Universal · day 2",kind:"Universal",lead:"Jason",col:"#ff7a1a",tbd:true,ev:[]},
  {id:"23",dow:"Wed",title:"Fly home",kind:"Travel day",col:"#3d5afe",
   note:"No park today: the 5:14 PM flight leaves too little time to be worth a ticket.",ev:[
@@ -487,8 +482,7 @@ const SHOWS=[
  ["19","8:00 PM","Happily Ever After","Magic Kingdom · Main Street facing the castle. In place by 7:20.","fireworks"],
  ["20","5:30 PM","Universal Holiday Parade featuring Macy's","Universal Studios streets, 30–60 min early.","balloons"],
  ["20","Dusk","The Magic of Christmas at Hogwarts Castle","Hogsmeade, Islands of Adventure. Repeats until close.","magic"],
- ["21","6:30 PM","Fantasmic!","Hollywood Studios · reserved through our lunch package.","fire"],
- ["21","9:15 PM","Luminous: The Symphony of Us","Epcot · World Showcase lagoon rail.","fireworks"]];
+ ["21","6:30 PM","Fantasmic!","Hollywood Studios · reserved through our lunch package.","fire"]];
 
 // [ride, park, min inches (0 = none), note]
 const RIDES=[
@@ -501,12 +495,11 @@ const RIDES=[
  ["Tower of Terror","HS",40,"Big drops + view from the top — likely a no for London"],["Rock 'n' Roller Coaster","HS",48,"Adults via Rider Switch"]];
 
 const TODO=[
- ["dinner","Book Epcot dinner, Mon 21 Dec ~8:00 PM, party of 7","Spice Road Table, then Rose & Crown","Now"],
  ["uni-tix","Add the Universal tickets to the Universal Orlando app","Jason · steps in Info → Tickets. Decide which Universal day is Epic Universe; consider Express passes","Now"],
  ["uni-din","Book Universal dinners for 20 and 22 Dec","Jason","Now"],
  ["jane","Approve the reworked Magic Kingdom morning","Nonna","Now"],
  ["das","Decide on DAS for Bowie (video-chat registration open; party limit Bowie + 3)","","Now"],
- ["shuttle","Reserve Waldorf shuttles: MK 6:45 AM 19 Dec · HS 7:30 AM 21 Dec · Epcot pickup after Luminous on 21 Dec · Epcot there and back on 18 Dec","Ask where the MK shuttle drops","Before the trip"],
+ ["shuttle","Reserve Waldorf shuttles: MK 6:45 AM 19 Dec · HS 7:30 AM 21 Dec · HS pickup ~7:00 PM 21 Dec · Epcot there and back on 18 Dec (back ~9:45 PM)","Ask where the MK shuttle drops","Before the trip"],
  ["ll","Book Lightning Lanes for everyone","MK Multi Pass: Peter Pan, Pooh, Haunted Mansion + Seven Dwarfs Single Pass · HS Multi Pass: Toy Story Mania, Smugglers Run, Runaway Railway + Rise of the Resistance Single Pass","Tue 15 Dec · 7:00 AM ET / 13:00 Barcelona"],
  ["hours","Check park hours and showtimes in the apps","Starlight parade, Festival of Fantasy, 21 Dec opening","Week before"],
  ["pack","Pack ponchos, ear defenders for Fantasmic! and spare clothes for the kids","","Packing"]];
@@ -673,7 +666,7 @@ function infoView(){
   <h2 class="sec" id="s-hotel">Hotel</h2>
   <div class="card"><h3>Waldorf Astoria Orlando</h3>${r("Rooms","3 · 18–23 Dec")}${r("Address","14200 Bonnet Creek Resort Lane")}${r("Phone",'<a href="tel:+14075975500">407-597-5500</a>')}${r("Confirmation",code("hotel"))}${r("Perk","30-min Early Entry at all 4 Disney parks, every day")}</div>
   <h2 class="sec" id="s-tickets">Tickets</h2>
-  <div class="card"><h3>Disney · 3-Day Park Hopper</h3>${r("Who","4 adults (10+) + 2 kids")}${r("Valid","Any 3 days, 18–22 Dec")}${r("Our plan","Epcot 18 · Hollywood Studios + Epcot 21 · one day spare")}${r("Confirmation",code("d3"))}</div>
+  <div class="card"><h3>Disney · 3-Day Park Hopper</h3>${r("Who","4 adults (10+) + 2 kids")}${r("Valid","Any 3 days, 18–22 Dec")}${r("Our plan","Epcot 18 · Hollywood Studios 21 · one day spare")}${r("Confirmation",code("d3"))}</div>
   <div class="card"><h3>Disney · 1-Day Magic Kingdom</h3>${r("Who","4 adults (10+) + 2 kids")}${r("Valid","Sat 19 Dec only")}${r("Confirmation",code("mk1"))}</div>
   <div class="card"><h3>Universal · 1-Day Park-to-Park + 1-Day Epic Universe</h3>${r("Who","4 adults (10+) + 2 kids (3–9)")}${r("Valid","19–22 Dec")}${r("Our plan","Sun 20 + Tue 22 — which day is Epic Universe is still to decide")}${r("Confirmation",code("u2"))}</div>
   <div class="card"><h3>Universal · 1-Day Park-to-Park</h3>${r("Who","1 adult (10+)")}${r("Valid","Sun 20 Dec only")}${r("Confirmation",code("u1"))}</div>
@@ -684,7 +677,7 @@ function infoView(){
   <div class="card applinks"><a href="https://apps.apple.com/us/app/my-disney-experience/id547436543" target="_blank" rel="noopener"><b>My Disney Experience</b><small>Disney tickets, Lightning Lanes, mobile food orders, wait times</small><span>Get on iPhone ›</span></a>
   <a href="https://apps.apple.com/us/app/universal-orlando-resort/id878217080" target="_blank" rel="noopener"><b>Universal Orlando Resort</b><small>Universal tickets in the wallet, maps, show times, food orders</small><span>Get on iPhone ›</span></a></div>
   <h2 class="sec" id="s-food">Restaurants</h2>
-  <div class="card">${r("Spice Road Table (Epcot, Morocco)","Fri 18 · 6:50 PM · Luminous view")}${r("Cinderella's Royal Table","Sat 19 · 8:05 AM · cancellable")}${r("Hollywood & Vine + Fantasmic!","Mon 21 · 12:35 PM · 6 guests")}${r("Confirmation",code("hv"))}${r("Epcot dinner","Mon 21 · to book")}</div>
+  <div class="card">${r("Spice Road Table (Epcot, Morocco)","Fri 18 · 6:50 PM · Luminous view")}${r("Cinderella's Royal Table","Sat 19 · 8:05 AM · cancellable")}${r("Hollywood & Vine + Fantasmic!","Mon 21 · 12:35 PM · 6 guests")}${r("Confirmation",code("hv"))}</div>
   <h2 class="sec" id="s-around">Getting around</h2>
   <div class="card">${r("Disney parks","Waldorf shuttle (reserve)")}${r("Universal","Uber or Lyft both ways")}${r("Airport","Van or two cars for 7")}</div>
   ${["hotel","usf","epic","mco"].map(k=>`<div class="card"><h3>To ${DEST[k][0]}</h3>${rideLinks(k)}</div>`).join("")}
