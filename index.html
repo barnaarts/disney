@@ -283,6 +283,9 @@ body.g-open{overflow:hidden}
 .cb .tg::after{content:"";position:absolute;width:30%;height:30%;border-radius:50%;background:rgba(20,30,110,.35)}
 .cb .pw{color:#fff;text-shadow:0 0 2px #1d1a3a,0 0 2px #1d1a3a,0 2px 2px rgba(0,0,0,.4)}.cb .pb{color:#1d1a3a}
 #brc{width:100%;flex:1 1 0;min-height:320px;border-radius:20px;background:linear-gradient(#0e1650,#2443c9);touch-action:none}
+#game{position:fixed}
+#gsnow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.g-top{position:relative;z-index:1}
 .g-body.fullg{padding:0;gap:0;position:relative;justify-content:flex-start;overflow:hidden}
 .g-body.fullg canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:0!important;min-height:0!important;flex:none!important}
 .gpills{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:6px;z-index:2;pointer-events:none}
@@ -357,6 +360,7 @@ body.g-open{overflow:hidden}
 <div id="game" hidden>
   <div class="g-top"><button id="g-x" aria-label="Close games">✕</button><div class="g-t" id="g-title"></div><button id="g-next">Next ▸</button></div>
   <div class="g-body" id="g-body"></div>
+  <canvas id="gsnow" aria-hidden="true"></canvas>
 </div>
 <div id="inst" hidden><div class="ib" role="dialog" aria-label="Get the app">
   <img src="xmas3-icon-180.png" alt="" width="72" height="72"><h3>Put Disney Xmas'26 on your phone</h3>
@@ -1077,11 +1081,25 @@ function gnext(){if(!gbag.length){gbag=shuffle(GAMES);if(gbag[0]===gcur&&gbag.le
 function fanfare(){const a=ac();if(!a)return;const t=a.currentTime+.02;[[392,0,.13],[392,.15,.13],[392,.3,.13],[523,.45,.4],[392,.9,.15],[523,1.07,.15]].forEach(([f,d,l])=>tone(f,l,"sawtooth",.06,t+d));
   [523,659,784,1047].forEach(f=>tone(f,.9,"triangle",.07,t+1.25))}
 let gtOn=false;
+// gold snow over the game screen, kept off the playing area
+let gsRaf=0;
+function goldSnow(on){cancelAnimationFrame(gsRaf);const c=$("#gsnow"),g=c.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1);
+  if(!on||calm){g.clearRect(0,0,c.width,c.height);return}
+  let W=0,H=0,fl=[];const size=()=>{W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};size();
+  const mk=top=>({x:Math.random()*W,y:top?Math.random()*H:-8,r:1.2+Math.random()*2.8,vy:.4+Math.random()*1,ph:Math.random()*6,sw:.3+Math.random()*.7,tw:Math.random()*6});
+  for(let i=0;i<70;i++)fl.push(mk(true));
+  const loop=()=>{if(c.clientWidth!==W||c.clientHeight!==H)size();g.clearRect(0,0,W,H);
+    const top=c.getBoundingClientRect(),play=[...gbody.querySelectorAll("canvas,.mem,.cb,.sim,.who,.opts,.gq,.g-btn,.gpills,.gcenter")].map(e=>{const r=e.getBoundingClientRect();return[r.left-top.left-4,r.top-top.top-4,r.right-top.left+4,r.bottom-top.top+4]}).filter(r=>r[2]-r[0]>0);
+    fl.forEach(f=>{f.ph+=.02;f.tw+=.12;f.y+=f.vy;f.x+=Math.sin(f.ph)*f.sw;if(f.y>H+8||f.x<-8||f.x>W+8){Object.assign(f,mk(false));return}
+      if(play.some(r=>f.x>r[0]&&f.x<r[2]&&f.y>r[1]&&f.y<r[3]))return;
+      g.globalAlpha=.6+.4*Math.sin(f.tw);g.fillStyle=f.r>3?"#ffd84a":"#ffc53d";g.shadowColor="rgba(255,200,60,.9)";g.shadowBlur=6;g.beginPath();g.arc(f.x,f.y,f.r,0,7);g.fill()});
+    g.shadowBlur=0;g.globalAlpha=1;gsRaf=requestAnimationFrame(loop)};
+  gsRaf=requestAnimationFrame(loop)}
 function openGames(){if(!gbox.hidden||gtOn)return;gtOn=true;buzz([15,40,15,40,30]);fanfare();
   const o=document.createElement("div");o.className="gt";o.innerHTML="<b>GAME<br>TIME!</b>";document.body.appendChild(o);
-  later(()=>{gbox.hidden=false;document.body.classList.add("g-open");gnext()},calm?0:900);
+  later(()=>{gbox.hidden=false;document.body.classList.add("g-open");gnext();goldSnow(true)},calm?0:900);
   setTimeout(()=>o.classList.add("out"),calm?200:1700);setTimeout(()=>{o.remove();gtOn=false},calm?600:2200)}
-function closeGames(){if(gbox.hidden)return;gclear();gbox.hidden=true;document.body.classList.remove("g-open");gbody.innerHTML=""}
+function closeGames(){if(gbox.hidden)return;goldSnow(false);gclear();gbox.hidden=true;document.body.classList.remove("g-open");gbody.innerHTML=""}
 $("#g-x").onclick=()=>{buzz();closeGames()};
 $("#g-next").onclick=()=>{buzz();gnext()};
 
