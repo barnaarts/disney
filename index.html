@@ -48,7 +48,7 @@ button{font:inherit;color:inherit}
 @keyframes bob{50%{transform:translateY(-5px)}}
 @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
 /* hero */
-.hero{position:relative;background:linear-gradient(180deg,var(--deep),var(--sky) 55%,var(--deep));color:#fff;overflow:hidden;padding:calc(10px + var(--sat)) 16px 14px;text-align:center}
+.hero{position:relative;background:linear-gradient(180deg,var(--deep) 0,var(--deep) calc(var(--sat) + 30px),var(--sky) 55%,var(--deep));color:#fff;overflow:hidden;padding:calc(10px + var(--sat)) 16px 14px;text-align:center}
 .hero .scene{display:block;width:min(560px,100%);height:auto;margin:0 auto;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .hero h1{font-size:clamp(32px,8vw,46px);line-height:1.05;margin:2px 0 0;text-wrap:balance;text-shadow:0 3px 0 rgba(10,20,90,.35)}
 .hero .hint{font-size:12.5px;font-weight:700;opacity:.7;margin-top:4px}
@@ -246,9 +246,10 @@ body.g-open{overflow:hidden}
 #game{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column}
 #game[hidden]{display:none}
 .g-top{display:flex;align-items:center;gap:10px;padding:calc(10px + var(--sat)) 14px 10px;background:var(--deep);color:#fff}
+.g-top #g-x{width:52px;height:52px;padding:0;font-size:28px;line-height:1;display:grid;place-items:center;border-width:3px}
 .g-top button{border:2px solid rgba(255,255,255,.6);background:none;color:#fff;font-weight:800;font-size:14px;padding:6px 12px;border-radius:999px;cursor:pointer;flex:none;min-height:40px}
 .g-t{flex:1;font-family:var(--fd);font-weight:700;font-size:clamp(20px,6vw,28px);text-transform:uppercase;letter-spacing:.03em;text-align:center;line-height:1.1}
-.g-body{flex:1;min-height:0;overflow:auto;padding:10px 12px calc(12px + env(safe-area-inset-bottom));width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;-webkit-user-select:none;user-select:none}
+.g-body{flex:1;min-height:0;overflow:auto;padding:10px 12px calc(16px + env(safe-area-inset-bottom));width:100%;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:12px;text-align:center;-webkit-user-select:none;user-select:none}
 .g-body .g-msg{min-height:0}
 .g-msg{margin:0;font-size:16px;color:var(--muted);min-height:2.8em}
 .g-score{font-size:15px;color:var(--muted)}.g-score b{color:var(--ink)}
@@ -259,7 +260,8 @@ body.g-open{overflow:hidden}
 .sim button.lit{opacity:1;transform:scale(1.06);box-shadow:0 0 30px 6px var(--c)}
 .mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:min(100%,calc((100dvh - 190px) * .6))}
 .mem button img{width:100%;height:100%;object-fit:cover;border-radius:12px;opacity:0;transition:opacity .2s}
-.mem button.up img,.mem button.got img{opacity:1}
+.mem button.up img,.mem button.got img,.mem button.up .emo,.mem button.got .emo{opacity:1}
+.mem .emo{display:grid;place-items:center;width:100%;height:100%;border-radius:12px;font-size:clamp(38px,12vw,64px);opacity:0;transition:opacity .2s;color:#000}
 .mem button{padding:4px;overflow:hidden}
 .mem button{aspect-ratio:3/4;border:0;border-radius:16px;font-size:34px;cursor:pointer;background:linear-gradient(135deg,var(--sky2),var(--pink));color:transparent;transition:transform .25s}
 .mem button.up,.mem button.got{background:var(--card);color:inherit;box-shadow:0 2px 0 var(--line);transform:rotateY(180deg) scaleX(-1)}
@@ -851,7 +853,8 @@ const SIMON={title:"Copy the magic",start(){
 
 const MEMORY={title:"Match the pairs",start(){
   const E=[...ALL.filter(k=>PH[k]).map(k=>"p:"+k),...shuffle(["🏰","🎆","🎢","🎄","🚀","🦖","🎠","⭐","🦄","🍭"]).slice(0,3)],cards=shuffle([...E,...E]);let open=[],got=0,moves=0,lock=false;
-  const face=e=>e.startsWith("p:")?`<img src="${PH[e.slice(2)]}" alt="">`:e;
+  const EG=["linear-gradient(135deg,#ffd877,#ff7a1a)","linear-gradient(135deg,#8fd3ff,#3a5cf0)","linear-gradient(135deg,#a7f3d0,#10a99b)","linear-gradient(135deg,#ffb3d6,#ff4f9a)","linear-gradient(135deg,#d4b8ff,#8b3ffc)"];
+  const face=e=>e.startsWith("p:")?`<img src="${PH[e.slice(2)]}" alt="">`:`<span class="emo" style="background:${EG[[...e].length+e.codePointAt(0)%5]||EG[e.codePointAt(0)%5]}">${e}</span>`;
   gbody.innerHTML=`<p class="g-msg">Turn over two cards at a time and find all the pairs.</p><div class="mem">${cards.map((e,i)=>`<button data-i="${i}" aria-label="Card">${face(e)}</button>`).join("")}</div>
    <div class="g-score">Moves <b id="mm-m">0</b> · Best <b>${best("memory")||"–"}</b></div>`;
   const bs=[...gbody.querySelectorAll(".mem button")];
@@ -904,11 +907,12 @@ const POP={title:"Firework pop",start(){
   const c=$("#popc"),g=c.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1);let W=300,H=400,it=[],bits=[],score=0,run=false,tEnd=0,nextR=0;
   const size=()=>{W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};
   const cols=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#5cf2b0","#ff7a1a"],FUN=["🦆","🍕","🎁","🦄","🍩","🐸","🧦","🍦","🐙","🌮","🧁","🦖","🐷","🎺"];
-  const spawn=t=>{const r=Math.random(),type=r<.32?"rocket":r<.54?"face":r<.86?"fun":"star",el=(30-(tEnd-t)/1000);
-    it.push({type,x:40+Math.random()*(W-80),y:H+40,v:1.5+Math.random()*1.9+el*.06,c:cols[Math.random()*cols.length|0],rot:0,vr:(Math.random()-.5)*.08,ph:Math.random()*6,
-      sh:Math.random()*3|0,e:FUN[Math.random()*FUN.length|0],k:ALL[Math.random()*ALL.length|0],sz:type==="face"?46+Math.random()*16:type==="fun"?38+Math.random()*12:0})};
+  const mkItem=(type,sc,x,y,v)=>({type,sc,x,y,v,vx:0,c:cols[Math.random()*cols.length|0],rot:0,vr:(Math.random()-.5)*.08,ph:Math.random()*6,
+      sh:Math.random()*3|0,e:FUN[Math.random()*FUN.length|0],k:ALL[Math.random()*ALL.length|0],sz:(type==="face"?52:type==="fun"?42:40)*sc});
+  const spawn=t=>{const r=Math.random(),type=r<.32?"rocket":r<.54?"face":r<.86?"fun":"star",el=(30-(tEnd-t)/1000),giant=Math.random()<.16,sc=giant?2+Math.random()*.7:.6+Math.random()*.7;
+    it.push(mkItem(type,sc,40+Math.random()*(W-80),H+40*sc,(giant?1.1:1.5)+Math.random()*1.6+el*.05))};
   const star5=(x,y,R,r,rot)=>{g.beginPath();for(let i=0;i<10;i++){const a=rot+i*Math.PI/5-Math.PI/2,rr=i%2?r:R;g.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}g.closePath()};
-  const drawItem=o=>{g.save();g.translate(o.x,o.y);
+  const drawItem=o=>{g.save();g.translate(o.x,o.y);if(o.type!=="face"&&o.type!=="fun")g.scale(o.sc,o.sc);
     if(o.type==="rocket"){g.rotate(Math.sin(o.ph)*.12);g.fillStyle=o.c;
       if(o.sh===0){g.beginPath();g.moveTo(0,-18);g.lineTo(9,8);g.lineTo(-9,8);g.fill()}
       else if(o.sh===1){g.beginPath();g.ellipse(0,-2,9,16,0,0,7);g.fill();g.fillStyle="#fff";g.beginPath();g.arc(0,-6,4,0,7);g.fill();g.fillStyle=o.c;g.beginPath();g.moveTo(-9,6);g.lineTo(-15,16);g.lineTo(-6,12);g.moveTo(9,6);g.lineTo(15,16);g.lineTo(6,12);g.fill()}
@@ -921,13 +925,13 @@ const POP={title:"Firework pop",start(){
     else{g.rotate(o.rot);g.fillStyle="#ffc53d";star5(0,0,24,11,0);g.fill();g.fillStyle="#fff4c2";star5(0,0,10,5,0);g.fill()}
     g.restore()};
   const explode=o=>{
-    if(o.type==="rocket"){bang(.18);const n=40;for(let k=0;k<n;k++){const a=k/n*Math.PI*2,s=3+Math.random()*.6;bits.push({k:"dot",x:o.x,y:o.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:45,c:o.c})}}
+    if(o.type==="rocket"){bang(.12+o.sc*.08);const n=Math.round(30*o.sc+10);for(let k=0;k<n;k++){const a=k/n*Math.PI*2,s=(2.2+Math.random()*.6)*Math.sqrt(o.sc);bits.push({k:"dot",x:o.x,y:o.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:45,c:o.c})}}
     else if(o.type==="face"){funny(o.k);const col=FACECOL[o.k]||PEOPLE[o.k][1];for(let k=0;k<46;k++){const a=Math.random()*6.3,s=1+Math.random()*4.5;bits.push({k:"conf",x:o.x,y:o.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1.5,l:70,c:k%3?col:cols[k%cols.length],r:Math.random()*6,vr:(Math.random()-.5)*.4})}}
     else if(o.type==="fun"){tone(900+Math.random()*600,.12,"triangle",.14);tone(1400,.1,"sine",.1,ac()?ac().currentTime+.08:0);for(let k=0;k<12;k++){const a=Math.random()*6.3,s=1.5+Math.random()*3.5;bits.push({k:"emo",x:o.x,y:o.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,l:60,e:o.e,fs:14+Math.random()*12})}}
     else{chime();for(let k=0;k<60;k++){const a=k/60*Math.PI*2-Math.PI/2,rr=(k%12<6?1:.45),s=3.6*rr;bits.push({k:"dot",x:o.x,y:o.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:50,c:k%2?"#ffc53d":"#fff"})}}};
   const loop=now=>{g.clearRect(0,0,W,H);
     if(run&&now>nextR){nextR=now+Math.max(300,820-(30-(tEnd-now)/1000)*18);spawn(now)}
-    it.forEach(o=>{o.y-=o.v;o.ph+=.08;o.rot+=o.vr;o.x+=Math.sin(o.ph)*.6;drawItem(o)});it=it.filter(o=>o.y>-60);
+    it.forEach(o=>{o.y-=o.v;o.ph+=.08;o.rot+=o.vr;o.x+=Math.sin(o.ph)*.6+o.vx;o.vx*=.96;drawItem(o)});it=it.filter(o=>o.y>-60*o.sc&&o.x>-80&&o.x<W+80);
     bits.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.vx*=.98;p.l--;g.globalAlpha=Math.max(0,Math.min(1,p.l/35));
       if(p.k==="dot"){g.fillStyle=p.c;g.beginPath();g.arc(p.x,p.y,2.6,0,7);g.fill()}
       else if(p.k==="conf"){p.r+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.fillStyle=p.c;g.fillRect(-4,-2.5,8,5);g.restore()}
@@ -937,7 +941,10 @@ const POP={title:"Firework pop",start(){
       $("#pm").textContent=setBest("pop",score)?`New best: ${score}!`:`Time! You popped ${score}.`;$("#pg").hidden=false;sparkle()}}
     graf=requestAnimationFrame(loop)};
   c.addEventListener("pointerdown",e=>{if(!run)return;const b=c.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;
-    const i=it.findIndex(o=>Math.hypot(o.x-x,o.y-y)<Math.max(40,o.sz*.7));if(i<0)return;const o=it.splice(i,1)[0];score+=o.type==="face"?2:1;$("#psc").textContent=score;buzz(8);explode(o)});
+    const i=it.findIndex(o=>Math.hypot(o.x-x,o.y-y)<Math.max(34,(o.type==="face"||o.type==="fun"?o.sz*.6:26*o.sc)));
+    if(i<0){SFX.find(z=>z[0].includes("Pfffrt"))[1]();buzz(25);return}
+    const o=it.splice(i,1)[0];score+=o.type==="face"?2:1;$("#psc").textContent=score;buzz(8);explode(o);
+    if(o.sc>1.6){const n=3+(Math.random()*2|0);for(let k=0;k<n;k++){const m=mkItem(o.type,.6+Math.random()*.3,o.x,o.y,1.2+Math.random()*1.4);m.vx=(k-(n-1)/2)*2.2+(Math.random()-.5);if(o.type==="face")m.k=o.k;if(o.type==="fun")m.e=o.e;m.c=o.c;it.push(m)}}});
   const go=()=>{size();score=0;$("#psc").textContent=0;it=[];bits=[];run=true;tEnd=performance.now()+30000;nextR=0;$("#pg").hidden=true};
   $("#pg").onclick=()=>{buzz();go()};
   requestAnimationFrame(()=>{go();graf=requestAnimationFrame(loop)})}};
