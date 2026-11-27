@@ -713,7 +713,7 @@ function gusts(){const H=innerHeight;for(let i=0;i<60;i++)parts.push({k:"gust",x
 const FACEIMG={},FACECOL={};Object.keys(PH).forEach(k=>{const im=new Image();im.onload=()=>{try{const c=document.createElement("canvas");c.width=c.height=24;const g=c.getContext("2d");g.drawImage(im,0,0,24,24);
   const d=g.getImageData(0,0,24,24).data;let r=0,gg=0,b=0,n=0;for(let i=0;i<d.length;i+=4){const x=(i/4)%24,y=(i/4)/24|0;if(x>3&&x<20&&y>3&&y<20)continue;r+=d[i];gg+=d[i+1];b+=d[i+2];n++}
   FACECOL[k]=`rgb(${r/n|0},${gg/n|0},${b/n|0})`}catch(e){}};im.src=PH[k];FACEIMG[k]=im});
-function faceFly(){const H=innerHeight;shuffle(ALL).forEach((k,i)=>parts.push({k:"face",p:k,x:-90,y:rnd(H*.12,H*.85),vx:rnd(1.8,3.4),vy:rnd(-.35,.35),g:0,rot:rnd(0,6),vr:rnd(.012,.035)*(Math.random()<.5?-1:1),sz:rnd(50,86),l:900,L:900,dl:40+i*22+(Math.random()*25|0)}));if(!raf) tick()}
+function faceFly(){const H=innerHeight;shuffle(ALL).forEach((k,i)=>parts.push({k:"face",p:k,x:-90,y:rnd(H*.12,H*.85),vx:rnd(1.8,3.4),vy:rnd(-.35,.35),g:0,rot:rnd(0,6),vr:rnd(.012,.035)*(Math.random()<.5?-1:1),sz:rnd(50,86),l:900,L:900,dl:i*12+(Math.random()*15|0)}));if(!raf) tick()}
 function flyover(){const W=innerWidth,H=innerHeight,T=["✈️","🛩️","🛫","🚁","✈️"];
   for(let i=0;i<9;i++){const fs=18+Math.random()*46,ltr=Math.random()<.8;parts.push({k:"plane",e:T[i%T.length],fs,x:ltr?-80:W+80,y:rnd(H*.08,H*.85),vx:(ltr?1:-1)*rnd(6,14)*(40/fs+.4),vy:rnd(-1.2,.6),g:0,l:400,L:400,dl:i*7+(Math.random()*10|0),ltr})}
   for(let i=0;i<40;i++)parts.push({k:"gust",x:-200,y:rnd(0,H),vx:rnd(14,26),vy:0,g:0,l:120,L:120,w:rnd(60,180),dl:rnd(0,40)|0,c:["#8fd3ff","#ffffff","#b9a3ff"][i%3]});
@@ -1019,7 +1019,7 @@ $("#g-next").onclick=()=>{buzz();gnext()};
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;buzz();if(b.dataset.v==="rides")yeehaw();view=b.dataset.v;store.set("view",view);render();keepTop()});
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;buzz();day=b.dataset.d;store.set("day",day);render();keepTop()});
 main.addEventListener("click",e=>{
-  const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);setTimeout(faceFly,900);blowAway()}}
+  const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);setTimeout(faceFly,250);blowAway()}}
   const k=e.target.closest("[data-k]"); if(k){buzz();kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
   const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,[...lbl.split(" ")[0]].join(""));face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
   const shw=e.target.closest(".show[data-fx]"); if(shw&&!calm){showFx(shw.dataset.fx);shw.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:400})}
