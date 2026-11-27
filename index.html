@@ -215,9 +215,12 @@ h2.sec{font-size:22px;margin:24px 0 10px}
 .sr small{display:block;color:var(--muted);font-weight:800;font-size:12px}
 .sr b{font-size:15px}
 .sr mark{background:color-mix(in srgb,var(--gold) 55%,transparent);color:inherit;border-radius:3px}
+canvas#drift{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:8;transition:transform 1.1s cubic-bezier(.5,0,.8,.4),opacity 1.1s}
+canvas#drift.full{pointer-events:auto}
+canvas#drift.clear{transform:translateY(105vh);opacity:0}
 canvas#snowc{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:6}
 .fabs{z-index:7!important}
-.sfx{position:fixed;z-index:60;transform:translate(-50%,0);background:#fff;color:#1d1a3a;font:700 15px var(--fd);padding:6px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;animation:sfxup 1.3s ease-out forwards}
+.sfx{position:fixed;z-index:60;transform:translate(-50%,0);background:#fff;color:#1d1a3a;font:28px/1 var(--fd);padding:8px 10px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;animation:sfxup 1.3s ease-out forwards}
 @keyframes sfxup{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}15%{opacity:1;transform:translate(-50%,-10px) scale(1.1)}70%{opacity:1;transform:translate(-50%,-30px) scale(1)}100%{opacity:0;transform:translate(-50%,-50px)}}
 canvas#fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
 /* castle magic */
@@ -303,7 +306,6 @@ body.g-open{overflow:hidden}
     <use href="#castle" transform="translate(140 -20) scale(1.35)"/>
   </svg>
   <h1>Disney Xmas'26</h1>
-  <div class="hint">Tap the castle for magic · double-tap for games</div>
 </div>
 <header>
   <div class="tabs" id="tabs">
@@ -333,6 +335,7 @@ body.g-open{overflow:hidden}
 </div>
 <canvas id="fx"></canvas>
 <canvas id="snowc" aria-hidden="true"></canvas>
+<canvas id="drift" aria-hidden="true"></canvas>
 
 <script>
 {
@@ -691,6 +694,8 @@ function blowAway(){if(blowing)return;blowing=true;const H=innerHeight;
   setTimeout(()=>blowing=false,longest+100)}
 // planes zooming across when tapping the countdown
 function gusts(){const H=innerHeight;for(let i=0;i<60;i++)parts.push({k:"gust",x:-200,y:rnd(0,H),vx:rnd(14,28),vy:0,g:0,l:160,L:160,w:rnd(60,200),dl:rnd(0,90)|0,c:["#8fd3ff","#ffffff","#b9a3ff"][i%3]});if(!raf) tick()}
+const FACEIMG={};Object.keys(PH).forEach(k=>{const im=new Image();im.src=PH[k];FACEIMG[k]=im});
+function faceFly(){const H=innerHeight;shuffle(ALL).forEach((k,i)=>parts.push({k:"face",p:k,x:-90,y:rnd(H*.12,H*.85),vx:rnd(1.8,3.4),vy:rnd(-.35,.35),g:0,rot:rnd(0,6),vr:rnd(.012,.035)*(Math.random()<.5?-1:1),sz:rnd(50,86),l:900,L:900,dl:40+i*22+(Math.random()*25|0)}));if(!raf) tick()}
 function flyover(){const W=innerWidth,H=innerHeight,T=["✈️","🛩️","🛫","🚁","✈️"];
   for(let i=0;i<9;i++){const fs=18+Math.random()*46,ltr=Math.random()<.8;parts.push({k:"plane",e:T[i%T.length],fs,x:ltr?-80:W+80,y:rnd(H*.08,H*.85),vx:(ltr?1:-1)*rnd(6,14)*(40/fs+.4),vy:rnd(-1.2,.6),g:0,l:400,L:400,dl:i*7+(Math.random()*10|0),ltr})}
   for(let i=0;i<40;i++)parts.push({k:"gust",x:-200,y:rnd(0,H),vx:rnd(14,26),vy:0,g:0,l:120,L:120,w:rnd(60,180),dl:rnd(0,40)|0,c:["#8fd3ff","#ffffff","#b9a3ff"][i%3]});
@@ -716,6 +721,10 @@ function tick(){cv.width=innerWidth;cv.height=innerHeight;cx.clearRect(0,0,cv.wi
     else if(p.k==="balloon"){p.ph+=.04;p.x+=Math.sin(p.ph)*.8;if(p.y<-p.r*3)p.l=0;cx.globalAlpha=1;cx.strokeStyle="rgba(120,110,150,.7)";cx.lineWidth=1.2;cx.beginPath();cx.moveTo(p.x,p.y+p.r*1.15);cx.quadraticCurveTo(p.x+Math.sin(p.ph*2)*8,p.y+p.r*2,p.x,p.y+p.r*3);cx.stroke();
       cx.fillStyle=p.c;cx.beginPath();cx.ellipse(p.x,p.y,p.r*.85,p.r*1.1,0,0,7);cx.fill();cx.beginPath();cx.moveTo(p.x-4,p.y+p.r*1.18);cx.lineTo(p.x+4,p.y+p.r*1.18);cx.lineTo(p.x,p.y+p.r*1.02);cx.fill();
       cx.fillStyle="rgba(255,255,255,.45)";cx.beginPath();cx.ellipse(p.x-p.r*.3,p.y-p.r*.4,p.r*.18,p.r*.3,-.5,0,7);cx.fill()}
+    else if(p.k==="face"){if(p.x>innerWidth+120){p.l=0;return}p.rot+=p.vr;const r=p.sz/2,col=PEOPLE[p.p][1],im=FACEIMG[p.p];cx.globalAlpha=1;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);
+      cx.beginPath();cx.arc(0,0,r,0,7);cx.fillStyle=col;cx.fill();cx.save();cx.clip();
+      if(im&&im.complete&&im.naturalWidth)cx.drawImage(im,-r,-r,p.sz,p.sz);else{cx.fillStyle="#fff";cx.font=`700 ${r}px Fredoka,sans-serif`;cx.textAlign="center";cx.textBaseline="middle";cx.fillText(PEOPLE[p.p][0][0],0,2)}
+      cx.restore();cx.lineWidth=4;cx.strokeStyle=col;cx.beginPath();cx.arc(0,0,r,0,7);cx.stroke();cx.restore()}
     else if(p.k==="plane"){if(p.x<-120||p.x>innerWidth+120){p.l=0;return}cx.globalAlpha=1;cx.save();cx.translate(p.x,p.y);if(!p.ltr)cx.scale(-1,1);cx.font=p.fs+"px serif";cx.textAlign="center";cx.textBaseline="middle";cx.fillText(p.e,0,0);cx.restore()}
     else if(p.k==="gust"){if(p.x>innerWidth+200){p.l=0;return}cx.globalAlpha=.35*Math.min(1,p.l/40);cx.strokeStyle=p.c;cx.lineWidth=2;cx.beginPath();cx.moveTo(p.x-p.w,p.y);cx.lineTo(p.x,p.y);cx.stroke()}
     else if(p.k==="star"){p.ph+=.15;cx.globalAlpha=fa*(.55+.45*Math.sin(p.ph));cx.fillStyle=p.c;star4(p.x,p.y,p.r);if(p.y>innerHeight+20)p.l=0}
@@ -992,9 +1001,9 @@ $("#g-next").onclick=()=>{buzz();gnext()};
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;buzz();if(b.dataset.v==="rides")yeehaw();view=b.dataset.v;store.set("view",view);render();keepTop()});
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;buzz();day=b.dataset.d;store.set("day",day);render();keepTop()});
 main.addEventListener("click",e=>{
-  const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);blowAway()}}
+  const cd=e.target.closest("#cd"); if(cd){buzz(20);jet();if(!calm){gusts();setTimeout(flyover,700);setTimeout(faceFly,900);blowAway()}}
   const k=e.target.closest("[data-k]"); if(k){buzz();kids[k.dataset.k]=Math.max(30,Math.min(60,kids[k.dataset.k]+ +k.dataset.s));store.set("kids",kids);render()}
-  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,lbl);face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
+  const face=e.target.closest(".fm,.kid .ph"); if(face){buzz(12);const lbl=funny(face.dataset.p);if(lbl)popLabel(face,[...lbl.split(" ")[0]].join(""));face.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(-6deg) scale(1.06)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0) scale(1)"}],{duration:420})}
   const shw=e.target.closest(".show[data-fx]"); if(shw&&!calm){showFx(shw.dataset.fx);shw.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],{duration:400})}
   const rd=e.target.closest(".ride"); if(rd){buzz(12);yeehaw();rd.animate([{transform:"rotate(0)"},{transform:"rotate(-2deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0)"}],{duration:350})}
   const f=e.target.closest("[data-f]"); if(f){buzz();rideF=f.dataset.f;store.set("rideF",rideF);render()}
@@ -1015,7 +1024,23 @@ $("#snow2").innerHTML=flakes(60);
   const size=()=>{W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};size();addEventListener("resize",size);
   const mk=top=>({x:Math.random()*W,y:top?Math.random()*H*.5:-6,r:1+Math.random()*2.6,vy:.35+Math.random()*.9,ph:Math.random()*6,sw:.3+Math.random()*.7,m:1});
   for(let i=0;i<70;i++)fl.push(mk(true));
-  addEventListener("pointerdown",e=>{if(calm||e.target.closest("#game,#splash,.magic,button,a,input,.tab,.day,.ipill,.fab,.chip,.ride,.show,.fm,.kid,.todo,.place,.cd,#scene,#map"))return;for(let i=0;i<26;i++){const a=i/26*Math.PI*2+Math.random()*.2,v=1.2+Math.random()*2.4;rip.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:1.2+Math.random()*2.2,l:50+Math.random()*25})}},{passive:true});
+  // each tap on empty space throws a bigger burst and leaves more snow stuck to the screen, until it is all white; shake the phone to clear
+  const dc=$("#drift"),dg=dc.getContext("2d");let taps=0,full=false,askedMotion=false;const FULL=16;
+  const dsize=()=>{dc.width=innerWidth*dpr;dc.height=innerHeight*dpr;dg.setTransform(dpr,0,0,dpr,0,0);taps=0;full=false;dc.classList.remove("full")};dsize();addEventListener("resize",dsize);
+  const blob=(x,y,r)=>{const gr=dg.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,"rgba(255,255,255,.98)");gr.addColorStop(.6,"rgba(250,252,255,.9)");gr.addColorStop(1,"rgba(235,242,255,0)");dg.fillStyle=gr;dg.beginPath();dg.arc(x,y,r,0,7);dg.fill()};
+  const stamp=(x,y)=>{const R=40+taps*taps*3.2,n=10+taps*3;for(let i=0;i<n;i++){const a=Math.random()*6.3,d=Math.random()**.6*R;blob(x+Math.cos(a)*d,y+Math.sin(a)*d,10+Math.random()*(18+taps*3))}};
+  const cover=()=>{full=true;dc.classList.add("full");const W=innerWidth,H=innerHeight;dg.fillStyle="#f6f9ff";dg.fillRect(0,0,W,H);for(let i=0;i<260;i++)blob(Math.random()*W,Math.random()*H,10+Math.random()*40);
+    dg.fillStyle="rgba(170,190,235,.18)";for(let i=0;i<120;i++){dg.beginPath();dg.arc(Math.random()*W,Math.random()*H,1+Math.random()*2.5,0,7);dg.fill()}};
+  const clearSnow=()=>{if(!taps&&!full)return;dc.classList.add("clear");buzz([20,30,20]);try{const a=ac(),t=a.currentTime,s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noise();f.type="lowpass";f.frequency.setValueAtTime(2500,t);f.frequency.exponentialRampToValueAtTime(300,t+1);g.gain.setValueAtTime(.4,t);g.gain.exponentialRampToValueAtTime(.0001,t+1.1);s.connect(f).connect(g).connect(a.destination);s.start(t);s.stop(t+1.2)}catch(e){}
+    setTimeout(()=>{dg.clearRect(0,0,dc.width,dc.height);taps=0;full=false;dc.classList.remove("full","clear")},1150)};
+  const askMotion=()=>{if(askedMotion)return;askedMotion=true;try{if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==="function")DeviceMotionEvent.requestPermission().catch(()=>{})}catch(e){}};
+  let lastA=null;addEventListener("devicemotion",e=>{const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;if(lastA){const d=Math.abs(a.x-lastA.x)+Math.abs(a.y-lastA.y)+Math.abs(a.z-lastA.z);if(d>28&&(taps||full))clearSnow()}lastA={x:a.x,y:a.y,z:a.z}});
+  let holdT=0;dc.addEventListener("pointerdown",()=>{holdT=setTimeout(clearSnow,1200)});dc.addEventListener("pointerup",()=>{clearTimeout(holdT);askMotion()});
+  addEventListener("pointerup",()=>{if(taps>=FULL/2)askMotion()});
+  addEventListener("pointerdown",e=>{if(calm||full||e.target.closest("#game,#splash,.magic,button,a,input,.tab,.day,.ipill,.fab,.chip,.ride,.show,.fm,.kid,.todo,.place,.cd,#scene,#map"))return;
+    taps++;const n=26+taps*10,sp=1+taps*.35;
+    for(let i=0;i<n;i++){const a=i/n*Math.PI*2+Math.random()*.3,v=(1.2+Math.random()*2.4)*sp;rip.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:(1.2+Math.random()*2.2)*(1+taps*.08),l:50+Math.random()*25+taps*3})}
+    if(taps>=FULL)setTimeout(cover,350);else stamp(e.clientX,e.clientY)},{passive:true});
   const loop=()=>{g.clearRect(0,0,W,H);
     if(!calm&&!document.hidden){const lim=$("header").getBoundingClientRect().bottom;
       fl.forEach(f=>{f.ph+=.02;f.y+=f.vy;f.x+=Math.sin(f.ph)*f.sw;if(f.y>lim-2)f.m-=.08;
