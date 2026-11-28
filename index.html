@@ -33,6 +33,10 @@
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{touch-action:manipulation}
+.dust{position:fixed;inset:0;z-index:7;pointer-events:none;opacity:0;overflow:hidden;background:radial-gradient(ellipse at 20% 30%,rgba(196,170,128,.35),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(170,145,105,.35),transparent 60%),rgba(120,100,75,.28);
+  -webkit-backdrop-filter:sepia(.35) saturate(.8) brightness(.82);backdrop-filter:sepia(.35) saturate(.8) brightness(.82)}
+.dust::before{content:"";position:absolute;inset:-50% -100%;background-image:radial-gradient(rgba(235,215,175,.55) 1px,transparent 1.6px),radial-gradient(rgba(200,175,135,.45) 1px,transparent 1.8px);background-size:23px 19px,37px 31px;background-position:0 0,11px 7px;animation:dustdrift 1.4s linear infinite}
+@keyframes dustdrift{to{transform:translateX(30%) translateY(-3%)}}
 html{background:var(--deep);overscroll-behavior-y:none;overflow-x:clip;scroll-padding-top:170px}
 body{margin:0;min-height:100vh;background:var(--deep);color:var(--ink);font:16px/1.5 var(--fb);-webkit-font-smoothing:antialiased;overflow-x:clip}
 h1,h2,h3,.f{font-family:var(--fd)}
@@ -736,11 +740,13 @@ function mapView(){
   return `<button class="playtrip" data-play="trip">▶ Play the whole trip</button><div id="map"><div class="mapmsg">Loading the map…</div></div>`+
    PLACES.map((p,i)=>`<div class="place" data-p="${i}" style="--c:${p[4]}"><span class="dot">${p[5]}</span>${vtag(p[0],"pimg",160)}<div class="n"><b>${p[1]}</b><small>${p[6]}</small></div><a href="${gmap(p)}" target="_blank" rel="noopener">Directions</a></div>`).join("")+
    `<h2 class="sec">Official park maps</h2><div class="card applinks">`+
-   [["Magic Kingdom","https://disneyworld.disney.go.com/destinations/magic-kingdom/","Disney · \"Guide Map\" PDF at the bottom of the page"],
-    ["Epcot","https://disneyworld.disney.go.com/destinations/epcot/","Disney · \"Guide Map\" PDF at the bottom of the page"],
-    ["Hollywood Studios","https://disneyworld.disney.go.com/destinations/hollywood-studios/","Disney · \"Guide Map\" PDF at the bottom of the page"],
-    ["Universal Studios, Islands of Adventure, Epic Universe","https://www.universalorlando.com/web/en/us/plan-your-visit/resort-maps","Universal · interactive map, filter by park"]]
-   .map(m=>`<a href="${m[1]}" target="_blank" rel="noopener"><b>${m[0]}</b><small>${m[2]}</small><span>Open map ›</span></a>`).join("")+`</div>
+   [["Magic Kingdom","https://cdn1.parksmedia.wdprapps.disney.com/vision-dam/digital/parks-platform/parks-global-assets/disney-world/guest-services/guide-maps/MK_0626_EN-DIGITAL.pdf#page=2","Disney guide map · June 2026 · big file, map on page 2"],
+    ["Epcot","https://cdn1.parksmedia.wdprapps.disney.com/vision-dam/digital/parks-platform/parks-global-assets/disney-world/guest-services/guide-maps/EPCOT-guidemap_0726_ENG-DIGITAL.pdf","Disney guide map · July 2026"],
+    ["Hollywood Studios","https://cdn1.parksmedia.wdprapps.disney.com/vision-dam/digital/parks-platform/parks-global-assets/disney-world/guest-services/guide-maps/DHS_052626_EN-KM.pdf","Disney guide map · May 2026"],
+    ["Universal Studios Florida","https://www.universalorlando.com/contentdata/uor/en/us/files/Documents/universal-studios-florida-park-map_EN.pdf","Universal park map"],
+    ["Islands of Adventure","https://www.universalorlando.com/contentdata/uor/en/us/files/Documents/islands-of-adventure-park-map-english.pdf","Universal park map · Hogsmeade, Hogwarts Castle"],
+    ["Epic Universe","https://www.universalorlando.com/contentdata/uor/en/us/files/Documents/universal-epic-universe-park-map-english.pdf","Universal park map"]]
+   .map(m=>`<a href="${m[1]}" target="_blank" rel="noopener"><b>${m[0]}</b><small>${m[2]}</small><span>Open PDF ›</span></a>`).join("")+`</div>
    <p class="foot" style="margin-top:4px">In the parks, the My Disney Experience and Universal apps show live maps with wait times. Paper maps are free at every entrance.</p>`+
    `<p class="foot">Pins are approximate. "Directions" opens Google Maps. Photos: Wikimedia Commons (CC BY / BY-SA).</p>`;
 }
@@ -822,6 +828,8 @@ function blowAway(){if(blowing)return;blowing=true;const H=innerHeight;
   [...document.querySelectorAll(".hero h1,.hero .hint,.tab,.cd,.dh,.note,.nextup,.ev,.fab,.ipill,.show,.ride,.card,.fm,.kid,.todo,.place,.chip")].filter(vis).forEach(el=>{
     const a=1.5+Math.random()*3,delay=900+Math.random()*900,dur=2600+Math.random()*2200;longest=Math.max(longest,delay+dur);
     el.animate([{transform:"rotate(0) translateX(0)"},{transform:`rotate(${a}deg) translateX(${4+a*2}px)`,offset:.25},{transform:`rotate(${-a*.4}deg) translateX(0)`,offset:.5},{transform:`rotate(${a*.6}deg) translateX(${a}px)`,offset:.72},{transform:"rotate(0) translateX(0)"}],{duration:dur,delay,easing:"ease-in-out"})});
+  const du=document.createElement("div");du.className="dust";document.body.appendChild(du);
+  du.animate([{opacity:0},{opacity:1,offset:.18},{opacity:1,offset:.7},{opacity:0}],{duration:longest+600,easing:"ease-in-out"}).onfinish=()=>du.remove();
   setTimeout(()=>blowing=false,longest+100)}
 // planes zooming across when tapping the countdown
 function gusts(){const H=innerHeight;for(let i=0;i<60;i++)parts.push({k:"gust",x:-200,y:rnd(0,H),vx:rnd(14,28),vy:0,g:0,l:160,L:160,w:rnd(60,200),dl:rnd(0,90)|0,c:["#8fd3ff","#ffffff","#b9a3ff"][i%3]});if(!raf) tick()}
