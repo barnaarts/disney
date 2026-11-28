@@ -32,6 +32,7 @@
   --sat:env(safe-area-inset-top,0px)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
+html,body{touch-action:manipulation}
 html{background:var(--deep);overscroll-behavior-y:none;overflow-x:clip;scroll-padding-top:170px}
 body{margin:0;min-height:100vh;background:var(--deep);color:var(--ink);font:16px/1.5 var(--fb);-webkit-font-smoothing:antialiased;overflow-x:clip}
 h1,h2,h3,.f{font-family:var(--fd)}
@@ -749,7 +750,7 @@ function loadLeaflet(cb){if(window.L)return cb();
   const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=cb;
   s.onerror=()=>{const m=$("#map");if(m)m.innerHTML='<div class="mapmsg">The map needs an internet connection. The list below still works.</div>'};document.head.appendChild(s)}
 function drawMap(){loadLeaflet(()=>{const el=$("#map");if(!el||!window.L)return;el.innerHTML="";
-  LM=L.map(el,{zoomControl:true,attributionControl:true});
+  LM=L.map(el,{zoomControl:true,attributionControl:true,doubleClickZoom:false});
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(LM);
   mk=PLACES.map(p=>L.marker([p[2],p[3]],{icon:L.divIcon({className:"",html:`<div class="mk" style="--c:${p[4]}"><span>${p[5]}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]})}).addTo(LM).bindPopup(`${vtag(p[0],"",360,"width:180px;height:110px;object-fit:cover;border-radius:10px;display:block;margin-bottom:6px")}<b>${p[1]}</b><br>${p[6]}`));
   LM.fitBounds(L.latLngBounds(PLACES.map(p=>[p[2],p[3]])),{padding:[24,24]})})}
@@ -953,7 +954,7 @@ function switchTour(dir){const ids=["trip",...Object.keys(ROUTES)],i=ids.indexOf
   $("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on");drawTour(n);renderTourSteps(n);playTour()}
 function openTour(id){loadLeaflet(()=>{if(!window.L)return;tourId=id;const t=$("#tour");t.hidden=false;document.body.classList.add("g-open");
   tourTitle(id);
-  if(!TM){TM=L.map("tmap",{zoomControl:false,attributionControl:true});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(TM);TL=L.layerGroup().addTo(TM)}
+  if(!TM){TM=L.map("tmap",{zoomControl:false,attributionControl:true,doubleClickZoom:false});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(TM);TL=L.layerGroup().addTo(TM)}
   setTimeout(()=>{TM.invalidateSize();drawTour(id);renderTourSteps(id);playTour()},60)})}
 function closeTour(){tourRunId++;$("#tour").hidden=true;document.body.classList.remove("g-open");$("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on")}
 function drawTour(id){TL.clearLayers();const seq=tripSeq(id);
