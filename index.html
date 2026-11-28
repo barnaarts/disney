@@ -407,7 +407,7 @@ main.swipe-go{transition:transform .26s cubic-bezier(.2,.8,.3,1),opacity .26s}
 <div id="tour" hidden>
   <div class="tmapbox"><div id="tmap"></div><div class="tday" id="tday"></div><button class="tclose" id="tclose" aria-label="Close map">✕</button><div class="tsheet" id="tsheet"></div></div>
   <div class="tcard" id="tcard"></div>
-  <div class="tbar"><button class="tbtn" id="treplay">↻ Replay</button><button class="tbtn" id="tsteps">☰ Steps</button></div>
+  <div class="tbar"><button class="tbtn" id="tprev" aria-label="Previous day">‹</button><button class="tbtn" id="treplay">↻ Replay</button><button class="tbtn" id="tsteps">☰ Steps</button><button class="tbtn" id="tnext" aria-label="Next day">›</button></div>
 </div>
 <div id="game" hidden>
   <div class="g-topbg"></div>
@@ -647,6 +647,10 @@ function snore(){const a=ac();if(!a)return;const t0=a.currentTime;
     og.gain.setValueAtTime(.0001,t);og.gain.exponentialRampToValueAtTime(.12,t+.6);og.gain.exponentialRampToValueAtTime(.0001,t+1.1);o.connect(of).connect(og).connect(a.destination);o.start(t);o.stop(t+1.15);
     const w=a.createOscillator(),wg=a.createGain();w.type="sine";w.frequency.setValueAtTime(900,t+1.2);w.frequency.exponentialRampToValueAtTime(520,t+1.8);
     wg.gain.setValueAtTime(.0001,t+1.2);wg.gain.exponentialRampToValueAtTime(.05,t+1.3);wg.gain.exponentialRampToValueAtTime(.0001,t+1.85);w.connect(wg).connect(a.destination);w.start(t+1.2);w.stop(t+1.9)}}
+const MON=["👻","👾","👽","🐲","🦇","🐙","🦖","🎃","👻","👾"];
+function ghostWoo(){const a=ac();if(!a)return;const t=a.currentTime,o=a.createOscillator(),g=a.createGain(),v=a.createOscillator(),vg=a.createGain();o.type="sine";
+  o.frequency.setValueAtTime(420,t);o.frequency.linearRampToValueAtTime(620,t+.5);o.frequency.linearRampToValueAtTime(300,t+1.4);v.frequency.value=6;vg.gain.value=18;v.connect(vg).connect(o.frequency);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.2);g.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(g).connect(a.destination);o.start(t);v.start(t);o.stop(t+1.55);v.stop(t+1.55)}
 function zzz(el){if(!el)return;const r=el.getBoundingClientRect();["z","z","Z","💤","Z","💤"].forEach((s,i)=>setTimeout(()=>{const z=document.createElement("div");z.className="zz";z.textContent=s;
   z.style.left=(r.left+r.width*.6)+"px";z.style.top=r.top+"px";z.style.fontSize=(16+i*4)+"px";z.style.setProperty("--dx",(14+Math.random()*26)+"px");document.body.appendChild(z);setTimeout(()=>z.remove(),2300)},i*420))}
 // face moves: Info cards move to match their sound; Rides faces get a different move each tap
@@ -730,6 +734,13 @@ const gmap=p=>`https://www.google.com/maps/search/?api=1&query=${encodeURICompon
 function mapView(){
   return `<button class="playtrip" data-play="trip">▶ Play the whole trip</button><div id="map"><div class="mapmsg">Loading the map…</div></div>`+
    PLACES.map((p,i)=>`<div class="place" data-p="${i}" style="--c:${p[4]}"><span class="dot">${p[5]}</span>${vtag(p[0],"pimg",160)}<div class="n"><b>${p[1]}</b><small>${p[6]}</small></div><a href="${gmap(p)}" target="_blank" rel="noopener">Directions</a></div>`).join("")+
+   `<h2 class="sec">Official park maps</h2><div class="card applinks">`+
+   [["Magic Kingdom","https://disneyworld.disney.go.com/destinations/magic-kingdom/","Disney · \"Guide Map\" PDF at the bottom of the page"],
+    ["Epcot","https://disneyworld.disney.go.com/destinations/epcot/","Disney · \"Guide Map\" PDF at the bottom of the page"],
+    ["Hollywood Studios","https://disneyworld.disney.go.com/destinations/hollywood-studios/","Disney · \"Guide Map\" PDF at the bottom of the page"],
+    ["Universal Studios, Islands of Adventure, Epic Universe","https://www.universalorlando.com/web/en/us/plan-your-visit/resort-maps","Universal · interactive map, filter by park"]]
+   .map(m=>`<a href="${m[1]}" target="_blank" rel="noopener"><b>${m[0]}</b><small>${m[2]}</small><span>Open map ›</span></a>`).join("")+`</div>
+   <p class="foot" style="margin-top:4px">In the parks, the My Disney Experience and Universal apps show live maps with wait times. Paper maps are free at every entrance.</p>`+
    `<p class="foot">Pins are approximate. "Directions" opens Google Maps. Photos: Wikimedia Commons (CC BY / BY-SA).</p>`;
 }
 let LM=null,mk=[];
@@ -861,8 +872,8 @@ function castleMagic(){
   const g=c.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1);let W,H;
   const size=()=>{W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)};size();
   const r=$("#scene").getBoundingClientRect(),ox=r.left+r.width/2,oy=Math.max(40,r.top+r.height*.4);
-  let glit=[];const stars=[],fw=[],cols=["#ffffff","#ffe9a8","#ffc53d","#ffd9ec","#bfe9ff"],fcols=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#5cf2b0","#ffffff"];
-  const t0=performance.now(),DUR=calm?1500:7000;let last=t0,nextBang=t0+900,end=false,rafm=0;
+  let glit=[],nextMon=0,nextComet=0,moaned=false;const mons=[],comets=[],stars=[],fw=[],cols=["#ffffff","#ffe9a8","#ffc53d","#ffd9ec","#bfe9ff"],fcols=["#ffc53d","#ff4f9a","#7ee8ff","#b78cff","#5cf2b0","#ffffff"];
+  const t0=performance.now(),DUR=calm?1500:10000;let last=t0,nextBang=t0+900,end=false,rafm=0;
   magic={o,start:t0,stop(){end=true}};
   requestAnimationFrame(()=>o.classList.add("on"));buzz(20);sparkle(.1);
   function loop(now){const t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000);last=now;
@@ -879,14 +890,32 @@ function castleMagic(){
       if(s.z>2){g.fillStyle=s.c;g.beginPath();g.arc(s.x,s.y,s.z*.9,0,7);g.fill()}}
     if(!end&&!calm&&now>nextBang){nextBang=now+120+Math.random()*Math.max(200,900-t*90);
       const shots=Math.random()<.25?2+(Math.random()*2|0):1;
-      for(let s2=0;s2<shots;s2++){const bx=W*(.05+Math.random()*.9),by=H*(.06+Math.random()*.7),cc=fcols[Math.random()*fcols.length|0],kind=Math.random()*4|0,n=30+(Math.random()*90|0),pw=1.5+Math.random()*4;
-        for(let i=0;i<n;i++){const a=kind===0?i/n*Math.PI*2:Math.random()*Math.PI*2,sp2=kind===0?pw:Math.random()*pw*1.3;
-          fw.push({x:bx,y:by,vx:Math.cos(a)*sp2,vy:Math.sin(a)*sp2,l:(kind===2?110:50)+Math.random()*40,c:kind===3?fcols[Math.random()*fcols.length|0]:cc,gr:kind===2?.09:.04,r:kind===2?1.6:1.4+Math.random()*1.6,fl:Math.random()<.3})}}
+      for(let s2=0;s2<shots;s2++){const bx=W*(.05+Math.random()*.9),by=H*(.06+Math.random()*.7),cc=fcols[Math.random()*fcols.length|0],kind=Math.random()*(t>5?5:4)|0,n=kind===4?80:30+(Math.random()*90|0),pw=1.5+Math.random()*4;
+        for(let i=0;i<n;i++){const a=kind===0?i/n*Math.PI*2:Math.random()*Math.PI*2,sp2=kind===0?pw:Math.random()*pw*1.3;let vx=Math.cos(a)*sp2,vy=Math.sin(a)*sp2;
+          if(kind===4){const th=i/n*Math.PI*2,s=Math.sin(th);vx=16*s*s*s*pw*.08;vy=-(13*Math.cos(th)-5*Math.cos(2*th)-2*Math.cos(3*th)-Math.cos(4*th))*pw*.08}
+          fw.push({x:bx,y:by,vx,vy,l:(kind===2?110:50)+Math.random()*40,c:kind===4?"#ff4f9a":kind===3?fcols[Math.random()*fcols.length|0]:cc,gr:kind===2?.09:kind===4?.015:.04,r:kind===2?1.6:1.4+Math.random()*1.6,fl:Math.random()<.3})}}
       bang((.2+Math.random()*.3)*(shots>1?1.2:1));if(Math.random()<.35)whistle();buzz(10+(Math.random()*20|0))}
     for(let i=fw.length-1;i>=0;i--){const p=fw[i];p.x+=p.vx;p.y+=p.vy;p.vy+=p.gr;p.vx*=.984;p.l--;if(p.l<=0){fw.splice(i,1);continue}
       g.globalAlpha=Math.min(1,p.l/40)*(p.fl?.4+Math.random()*.6:1);g.fillStyle=p.c;g.beginPath();g.arc(p.x,p.y,p.r,0,7);g.fill()}
     g.globalAlpha=1;
-    if(!end&&now-t0>DUR) end=true;
+    // the show builds up: shooting stars from 2s, monsters drifting down from 3.5s, heart bursts from 5s, big finale
+    if(!end&&!calm){
+      if(t>2&&now>nextComet){nextComet=now+300+Math.random()*Math.max(150,900-t*60);const lt=Math.random()<.5;comets.push({x:lt?-20:W+20,y:Math.random()*H*.45,vx:(lt?1:-1)*(7+Math.random()*7),vy:1.5+Math.random()*2.5,c:cols[Math.random()*cols.length|0],tr:[]})}
+      if(t>3.5&&now>nextMon){nextMon=now+Math.max(250,900-t*70)+Math.random()*400;mons.push({e:MON[Math.random()*MON.length|0],x:W*(.1+Math.random()*.8),y:-40,vy:1.2+Math.random()*1.8,ph:Math.random()*6,sz:30+Math.random()*34,ty:H*(.35+Math.random()*.45)});
+        if(!moaned){moaned=true;ghostWoo()}else if(Math.random()<.2)ghostWoo()}}
+    for(let i=comets.length-1;i>=0;i--){const c2=comets[i];c2.tr.push([c2.x,c2.y]);if(c2.tr.length>22)c2.tr.shift();c2.x+=c2.vx;c2.y+=c2.vy;
+      if(c2.x<-60||c2.x>W+60||c2.y>H+60){comets.splice(i,1);continue}
+      for(let k=1;k<c2.tr.length;k++){g.globalAlpha=k/c2.tr.length;g.strokeStyle=c2.c;g.lineWidth=k/c2.tr.length*4;g.beginPath();g.moveTo(c2.tr[k-1][0],c2.tr[k-1][1]);g.lineTo(c2.tr[k][0],c2.tr[k][1]);g.stroke()}
+      g.globalAlpha=1;g.fillStyle="#fff";g.beginPath();g.arc(c2.x,c2.y,3,0,7);g.fill()}
+    for(let i=mons.length-1;i>=0;i--){const m=mons[i];m.y+=m.vy;m.ph+=.05;m.x+=Math.sin(m.ph)*1.3;
+      g.globalAlpha=1;g.save();g.translate(m.x,m.y);g.rotate(Math.sin(m.ph)*.25);g.font=m.sz+"px serif";g.textAlign="center";g.textBaseline="middle";g.shadowColor="rgba(255,255,255,.8)";g.shadowBlur=14;g.fillText(m.e,0,0);g.restore();g.shadowBlur=0;
+      if(m.y>m.ty){mons.splice(i,1);const cc=fcols[Math.random()*fcols.length|0];
+        for(let k=0;k<50;k++){const a=k/50*Math.PI*2,s=1.5+Math.random()*2.5;fw.push({x:m.x,y:m.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:50+Math.random()*30,c:k%2?cc:"#fff",gr:.04,r:1.8,fl:true})}
+        bang(.2);buzz(12)}}
+    if(!end&&now-t0>DUR){end=true;
+      if(!calm){for(let b=0;b<7;b++){const bx=W*(.1+Math.random()*.8),by=H*(.1+Math.random()*.5),cc=fcols[b%fcols.length];
+          for(let i=0;i<90;i++){const a=i/90*Math.PI*2,s=2+Math.random()*3.5;fw.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:70+Math.random()*50,c:cc,gr:.035,r:1.8,fl:Math.random()<.4})}}
+        bang(.7);setTimeout(()=>bang(.5),180);buzz([30,40,60])}}
     if(end&&!o.classList.contains("bye")){o.classList.add("bye");o.classList.remove("on");magic=null;setTimeout(()=>{cancelAnimationFrame(rafm);rafm=-1;o.remove()},7200)}
     if(rafm!==-1)rafm=requestAnimationFrame(loop)}
   rafm=requestAnimationFrame(loop);
@@ -918,8 +947,12 @@ function tripSeq(id){
   if(id!=="trip") return ROUTES[id].map(s=>({s,day:id}));
   const out=[];Object.keys(ROUTES).forEach(d=>ROUTES[d].forEach(s=>{const last=out[out.length-1];if(last&&last.s[0]===s[0]){last.s=[s[0],last.s[1],last.s[2]+" · "+s[2],s[3]||last.s[3]];return}out.push({s:[...s],day:d})}));return out}
 let TM=null,TL=null,tourRunId=0,tourId=null;
+function tourTitle(id){const dd=DAYS.find(x=>x.id===id);$("#tday").textContent=id==="trip"?"Whole trip · 17–23 Dec":`${dd.dow} ${dd.id} Dec · ${dd.title}`}
+// swipe the bottom card (or tap ‹ ›) to play the previous / next day
+function switchTour(dir){const ids=["trip",...Object.keys(ROUTES)],i=ids.indexOf(tourId),n=ids[(i+dir+ids.length)%ids.length];tourId=n;buzz(6);ac();tourTitle(n);
+  $("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on");drawTour(n);renderTourSteps(n);playTour()}
 function openTour(id){loadLeaflet(()=>{if(!window.L)return;tourId=id;const t=$("#tour");t.hidden=false;document.body.classList.add("g-open");
-  const dd=DAYS.find(x=>x.id===id);$("#tday").textContent=id==="trip"?"Whole trip · 17–23 Dec":`${dd.dow} ${dd.id} Dec · ${dd.title}`;
+  tourTitle(id);
   if(!TM){TM=L.map("tmap",{zoomControl:false,attributionControl:true});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(TM);TL=L.layerGroup().addTo(TM)}
   setTimeout(()=>{TM.invalidateSize();drawTour(id);renderTourSteps(id);playTour()},60)})}
 function closeTour(){tourRunId++;$("#tour").hidden=true;document.body.classList.remove("g-open");$("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on")}
@@ -943,19 +976,20 @@ function playTour(){const run=++tourRunId,id=tourId,seq=tripSeq(id),alive=()=>ru
   const pad={paddingTopLeft:[24,70],paddingBottomRight:[24,24]};
   let car=null;$("#tcard").innerHTML="";
   (async()=>{
-    TM.fitBounds(seq[0].s[3]?L.latLngBounds([ll(seq[0].s[0]),ll(seq[1].s[0])]):orl,{...pad,animate:false,maxZoom:13});
+    if(seq[0].s[3])TM.fitBounds(L.latLngBounds([ll(seq[0].s[0]),ll(seq[1].s[0])]),{...pad,animate:false,maxZoom:13});else TM.setView(ll(seq[0].s[0]),15,{animate:false});
     car=L.marker(ll(seq[0].s[0]),{interactive:false,zIndexOffset:3000,icon:L.divIcon({className:"tcar",iconSize:[40,40],iconAnchor:[20,20],html:'<span class="tveh">🚗</span>'})}).addTo(TL);
     tourCard(seq[0],seq[1]?legOf(seq[0].s,seq[1].s):null);tourMarkStep('.tstep[data-st="0"]');await wait(1500);
     for(let i=0;i<seq.length-1;i++){if(!alive())return;const A=ll(seq[i].s[0]),B=ll(seq[i+1].s[0]),g=legOf(seq[i].s,seq[i+1].s);
       const el=car.getElement().querySelector(".tveh"),pa=TM.latLngToContainerPoint(A),pb=TM.latLngToContainerPoint(B),ang=Math.atan2(pb.y-pa.y,pb.x-pa.x)*180/Math.PI;
       if(g.fly){TM.flyToBounds(L.latLngBounds([A,B]),{...pad,duration:1.2,maxZoom:8});await wait(1300);el.textContent="✈️";el.style.transform=`rotate(${(ang+45).toFixed(0)}deg)`}
-      else{if(!orl.contains(TM.getBounds())&&!TM.getBounds().contains(orl)||TM.getZoom()<9){TM.flyToBounds(orl,{...pad,duration:1.2,maxZoom:13});await wait(1300)}
+      else{TM.flyToBounds(L.latLngBounds([A,B]),{...pad,duration:1.1,maxZoom:15});await wait(1200);
         el.textContent="🚗";el.style.transform=pb.x>pa.x?"scaleX(-1)":"none"}
       if(!alive())return;tourMarkStep(`.tleg[data-lg="${i}"]`);
       const dur=g.fly?4200:Math.min(3200,Math.max(1600,g.km*90));if(g.fly)jet();else carSound(dur);tourCard(seq[i+1],seq[i+2]?legOf(seq[i+1].s,seq[i+2].s):null,Math.min(dur,900));
       await new Promise(res=>{const t0=performance.now(),step=t=>{if(!alive())return res();const k=Math.min(1,(t-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
         car.setLatLng([A[0]+(B[0]-A[0])*e,A[1]+(B[1]-A[1])*e]);k<1?requestAnimationFrame(step):res()};requestAnimationFrame(step)});
       if(!alive())return;buzz(8);tourMarkStep(`.tstep[data-st="${i+1}"]`);
+      if(g.fly){TM.flyTo(B,13,{duration:1.6});await wait(1700);if(!alive())return}
       const home=seq[i+1].s[0]==="hotel"&&seq[i].s[0]!=="mco";if(home){el.textContent="😴";el.style.transform="none";snore();zzz(el)}
       await wait(home?3400:1200)}
     if(alive()){chime()}})()}
@@ -1259,6 +1293,10 @@ $("#g-next").onclick=()=>{buzz();gnext()};
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;buzz();if(b.dataset.v==="rides")yeehaw();view=b.dataset.v;store.set("view",view);render();keepTop()});
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;buzz();day=b.dataset.d;store.set("day",day);render();keepTop()});
 $("#tclose").addEventListener("click",()=>{buzz();closeTour()});
+$("#tprev").addEventListener("click",()=>switchTour(-1));$("#tnext").addEventListener("click",()=>switchTour(1));
+{let sx=null,sy=0;const tb=$("#tour");
+  tb.addEventListener("touchstart",e=>{if(!e.target.closest(".tcard,.tbar")){sx=null;return}sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  tb.addEventListener("touchend",e=>{if(sx==null)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;sx=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)switchTour(dx<0?1:-1)},{passive:true})}
 $("#treplay").addEventListener("click",()=>{buzz();ac();$("#tsheet").classList.remove("open");$("#tsteps").classList.remove("on");drawTour(tourId);playTour()});
 $("#tsteps").addEventListener("click",()=>{buzz();const o=$("#tsheet").classList.toggle("open");$("#tsteps").classList.toggle("on",o)});
 // swipe left/right on the day plan to change day
@@ -1309,7 +1347,7 @@ $("#snow2").innerHTML=flakes(60);
     g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f).connect(g).connect(a.destination);s.start(t,Math.random()*.5);s.stop(t+dur+.05)}catch(e){}};
   let meltT=0;const melt=()=>{dc.classList.add("melt");setTimeout(()=>{dg.clearRect(0,0,dc.width,dc.height);taps=0;cells={};full=false;dc.classList.remove("full","melt")},950)};
   const holdSnow=()=>{clearTimeout(meltT);dc.classList.remove("melt");meltT=setTimeout(melt,2000)};
-  const clearSnow=(dir)=>{if(!taps&&!full)return;clearTimeout(meltT);dc.style.setProperty("--sx",dir?(dir>0?"105vw":"-105vw"):"0");dc.style.setProperty("--sy",dir?"0":"105vh");dc.classList.add("clear");buzz(15);puff(.09,1.4,1000);try{const a=ac(),t=a.currentTime;[1568,1319,1047,880].forEach((f,i)=>tone(f,.6,"sine",.03,t+.15+i*.12))}catch(e){}
+  const clearSnow=(dir)=>{if(!taps&&!full)return;clearTimeout(meltT);dc.style.setProperty("--sx",dir?(dir>0?"105vw":"-105vw"):"0");dc.style.setProperty("--sy",dir?"0":"105vh");dc.classList.add("clear");
     setTimeout(()=>{dg.clearRect(0,0,dc.width,dc.height);taps=0;cells={};full=false;dc.classList.remove("full","clear")},1150)};
   const askMotion=()=>{if(askedMotion)return;askedMotion=true;try{if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==="function")DeviceMotionEvent.requestPermission().catch(()=>{})}catch(e){}};
   let lastA=null;addEventListener("devicemotion",e=>{const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;if(lastA){const d=Math.abs(a.x-lastA.x)+Math.abs(a.y-lastA.y)+Math.abs(a.z-lastA.z);if(d>28&&(taps||full))clearSnow()}lastA={x:a.x,y:a.y,z:a.z}});
@@ -1323,7 +1361,7 @@ $("#snow2").innerHTML=flakes(60);
     for(let i=0;i<n;i++){const a=i/n*Math.PI*2+Math.random()*.3,v=(1.2+Math.random()*2.4)*sp;rip.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:(1.2+Math.random()*2.2)*(1+taps*.08),l:50+Math.random()*25+taps*3})}
     const cx0=Math.round(e.clientX/90),cy0=Math.round(e.clientY/90);let c=0;for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++)c+=cells[(cx0+dx)+","+(cy0+dy)]||0;
     cells[cx0+","+cy0]=(cells[cx0+","+cy0]||0)+1;c++;
-    if(taps>=FULL){puff(.16,.9,900);setTimeout(cover,350)}else if(c>=5)stamp(e.clientX,e.clientY,c-4)},{passive:true});
+    if(taps>=FULL){puff(.16,.9,900);setTimeout(cover,350)}else if(c>=5)stamp(e.clientX,e.clientY,c-4);else puff(.06,.3,750)},{passive:true});
   const loop=()=>{g.clearRect(0,0,W,H);
     if(!calm&&!document.hidden){const lim=$("header").getBoundingClientRect().bottom;
       fl.forEach(f=>{f.ph+=.02;f.y+=f.vy;f.x+=Math.sin(f.ph)*f.sw;if(f.y>lim-2)f.m-=.08;
